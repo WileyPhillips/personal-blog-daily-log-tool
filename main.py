@@ -2,16 +2,17 @@ from functools import partial
 from tkinter import *
 from datetime import datetime
 
-# TODO Take care of the edge case where in the length of current time and the start time don't match
+
+global currentTime, resultOutput
 
 root = Tk()
 root.geometry("400x400")
 
-currentLog = []
 blankEndTime = False
-resultOutput = ""
+currentLog = []
 
 
+# Starts tracking an activity with an unspecified end time.
 def startSequence():
     global currentTime, currentLog
     currentLog.append(currentTime + " - --:---m: " + myScreen[1].get() + "\n")
@@ -21,18 +22,24 @@ def startSequence():
 def output():
     global currentLog, resultOutput
     resultOutput = ""
+    # each string in the list is to be on a separate line.
     for i in range(len(currentLog)):
         resultOutput += currentLog[i] + "\n"
     myScreen[6].config(text=resultOutput)
 
 
-def logCurrent(isStart):
-    global currentLog, blankEndTime, currentTime
+def formatTime():
+    global currentTime
     time = datetime.now().strftime('%H:%M')
     if int(time[0:2]) > 12:
-        currentTime = str(int(time[0:2])-12)+time[2:]+"pm"
+        currentTime = str(int(time[0:2]) - 12) + time[2:] + "pm"
     else:
         currentTime = time + "am"
+
+
+def logCurrent(isStart):
+    global currentLog, blankEndTime, currentTime
+    formatTime()
     # Checks if currently there is a start time without an accompanying end time.
     if not blankEndTime:
         # Hit to start the next task with no other activity currently in progress.
@@ -48,6 +55,7 @@ def logCurrent(isStart):
             currentLog[-1] = currentLog[-1][:len(currentTime)+3] + currentTime + currentLog[-1][len(currentTime)*2+4:]
             startSequence()
             print("True Start")
+        # Replaces the end time's placeholder dashes with the current time
         else:
             blankEndTime = False
             currentLog[-1] = currentLog[-1][:len(currentTime)+3] + currentTime + currentLog[-1][len(currentTime)*2+4:]
@@ -64,7 +72,7 @@ def copyLog():
 
 
 root.title("Daily Log Tool")
-myScreen = [Label(root, text="Test"),
+myScreen = [Label(root, text="Activity"),
             Entry(root),
             Button(root, command=partial(logCurrent, True), text="Start"),
             Button(root, command=partial(logCurrent, False), text="End"),

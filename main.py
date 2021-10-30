@@ -3,7 +3,7 @@ from tkinter import *
 from datetime import datetime
 
 
-global currentTime, resultOutput
+global currentTime, resultOutput, ending
 
 root = Tk()
 root.geometry("400x400")
@@ -29,12 +29,14 @@ def output():
 
 
 def formatTime():
-    global currentTime
+    global currentTime, ending
     time = datetime.now().strftime('%H:%M')
     if int(time[0:2]) > 12:
-        currentTime = str(int(time[0:2]) - 12) + time[2:] + "pm"
+        ending = "pm"
+        currentTime = str(int(time[0:2]) - 12) + time[2:] + ending
     else:
-        currentTime = time + "am"
+        ending = "am"
+        currentTime = time + ending
 
 
 def logCurrent(isStart):
@@ -46,19 +48,17 @@ def logCurrent(isStart):
         if isStart:
             blankEndTime = True
             startSequence()
-            print("False Start")
         # If they hit end time without an activity currently in progress nothing will occur.
     else:
         # In the case that they start logging the next activity without ending the previous
         # Uses the current time as the end time for the previous, and as the starting time for the current activity
         if isStart:
-            currentLog[-1] = currentLog[-1][:len(currentTime)+3] + currentTime + currentLog[-1][len(currentTime)*2+4:]
+            currentLog[-1] = currentLog[-1][:currentTime.find(ending)+5] + currentTime + currentLog[-1][(currentTime.find(ending)+2)*2+3:]
             startSequence()
-            print("True Start")
         # Replaces the end time's placeholder dashes with the current time
         else:
             blankEndTime = False
-            currentLog[-1] = currentLog[-1][:len(currentTime)+3] + currentTime + currentLog[-1][len(currentTime)*2+4:]
+            currentLog[-1] = currentLog[-1][:len(currentTime)+3] + currentTime + currentLog[-1][len(currentTime)*2+3:]
             print(currentLog)
             output()
             print("True End")

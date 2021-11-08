@@ -6,7 +6,7 @@ from datetime import datetime
 global currentTime, resultOutput, ending
 
 root = Tk()
-root.geometry("400x400")
+root.geometry("800x800")
 
 blankEndTime = False
 currentLog = []
@@ -71,6 +71,10 @@ def copyLog():
     root.clipboard_append(resultOutput)
 
 
+def formatLog():
+    print()
+
+
 root.title("Daily Log Tool")
 myScreen = [Label(root, text="Activity"),
             Entry(root),
@@ -78,7 +82,10 @@ myScreen = [Label(root, text="Activity"),
             Button(root, command=partial(logCurrent, False), text="End"),
             Label(root, text="Press to Copy Log"),
             Button(root, command=copyLog),
-            Label(root, text="")
+            Label(root, text=""),
+            Entry(root),
+            Label(root, text=""),
+            Button(root, command=formatLog)
             ]
 myGrid = [myScreen[0].grid(row=0, column=0),
           myScreen[1].grid(row=1, column=0),
@@ -86,7 +93,9 @@ myGrid = [myScreen[0].grid(row=0, column=0),
           myScreen[3].grid(row=2, column=1),
           myScreen[4].grid(row=3, column=0),
           myScreen[5].grid(row=3, column=1),
-          myScreen[6].grid(row=4, column=0)
+          myScreen[6].grid(row=4, column=0),
+          myScreen[7].grid(row=0, column=2),
+          myScreen[8].grid(row=1, column=2)
           ]
 
 root.mainloop()

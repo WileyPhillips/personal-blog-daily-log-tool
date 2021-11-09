@@ -8,6 +8,7 @@ global currentTime, resultOutput, ending
 root = Tk()
 root.geometry("800x800")
 
+resultOutput = ""
 blankEndTime = False
 currentLog = []
 
@@ -65,13 +66,17 @@ def logCurrent(isStart):
 
 
 # Useful for copying the current log for external use, since you can't highlight and copy the label manually
-def copyLog():
+def copyLog(firstLog):
     global resultOutput
     root.clipboard_clear()
     root.clipboard_append(resultOutput)
 
 
-def formatLog():
+def addActivity():
+    print()
+
+
+def subtractActivity():
     print()
 
 
@@ -81,11 +86,13 @@ myScreen = [Label(root, text="Activity"),
             Button(root, command=partial(logCurrent, True), text="Start"),
             Button(root, command=partial(logCurrent, False), text="End"),
             Label(root, text="Press to Copy Log"),
-            Button(root, command=copyLog),
+            Button(root, command=partial(copyLog, True)),
             Label(root, text=""),
             Entry(root),
-            Label(root, text=""),
-            Button(root, command=formatLog)
+            Entry(root),
+            Button(root, command=addActivity, text="+"),
+            Button(root, command=subtractActivity, text="-"),
+            Button(root, command=partial(copyLog, False), text="Copy")
             ]
 myGrid = [myScreen[0].grid(row=0, column=0),
           myScreen[1].grid(row=1, column=0),
@@ -95,7 +102,10 @@ myGrid = [myScreen[0].grid(row=0, column=0),
           myScreen[5].grid(row=3, column=1),
           myScreen[6].grid(row=4, column=0),
           myScreen[7].grid(row=0, column=2),
-          myScreen[8].grid(row=1, column=2)
+          myScreen[8].grid(row=0, column=3),
+          myScreen[9].grid(row=1, column=2),
+          myScreen[10].grid(row=1, column=3),
+          myScreen[11].grid(row=2, column=2)
           ]
 
 root.mainloop()

@@ -3,7 +3,7 @@ from tkinter import *
 from datetime import datetime
 
 
-global currentTime, resultOutput, ending
+global currentTime, resultOutput, ending, lastEventIndex
 
 root = Tk()
 root.geometry("800x800")
@@ -11,6 +11,7 @@ root.geometry("800x800")
 resultOutput = ""
 blankEndTime = False
 currentLog = []
+lastEventIndex = 0
 
 
 # Starts tracking an activity with an unspecified end time.
@@ -73,7 +74,18 @@ def copyLog(firstLog):
 
 
 def addActivity():
-    print()
+    global lastEventIndex
+    lastEventIndex += 1
+    # Adds a new event entry along with an entry for time
+    for i in range(2):
+        myScreen.insert(-3, Entry(root))
+        myScreen[-4].grid(row=lastEventIndex, column=i+2)
+    # Moves the bottom three buttons down one row
+    myScreen[-3].grid(row=lastEventIndex + 1, column=2),
+    myScreen[-2].grid(row=lastEventIndex + 1, column=3),
+    myScreen[-1].grid(row=lastEventIndex + 2, column=2)
+
+
 
 
 def subtractActivity():
@@ -101,11 +113,12 @@ myGrid = [myScreen[0].grid(row=0, column=0),
           myScreen[4].grid(row=3, column=0),
           myScreen[5].grid(row=3, column=1),
           myScreen[6].grid(row=4, column=0),
-          myScreen[7].grid(row=0, column=2),
-          myScreen[8].grid(row=0, column=3),
-          myScreen[9].grid(row=1, column=2),
-          myScreen[10].grid(row=1, column=3),
-          myScreen[11].grid(row=2, column=2)
+          myScreen[7].grid(row=lastEventIndex, column=2),
+          myScreen[8].grid(row=lastEventIndex, column=3),
+          myScreen[9].grid(row=lastEventIndex+1, column=2),
+          myScreen[10].grid(row=lastEventIndex+1, column=3),
+          myScreen[11].grid(row=lastEventIndex+2, column=2)
           ]
+
 
 root.mainloop()

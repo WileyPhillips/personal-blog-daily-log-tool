@@ -97,7 +97,8 @@ def subtractActivity():
         lastEventIndex -= 1
         # Adds a new event entry along with an entry for time
         for i in range(2):
-            myScreen.pop(-3)
+            myScreen[-4].destroy()
+            myScreen.pop(-4)
         # Moves the bottom three buttons up one row
         myScreen[-3].grid(row=lastEventIndex + 1, column=2),
         myScreen[-2].grid(row=lastEventIndex + 1, column=3),

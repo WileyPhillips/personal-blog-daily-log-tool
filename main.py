@@ -108,37 +108,37 @@ def subtractActivity():
 def setScreen():
     global myScreen
     if firstTime:
-        myScreen = [Label(root, text="Activity"),
-                    Entry(root),
-                    Button(root, command=partial(logCurrent, True), text="Start"),
-                    Button(root, command=partial(logCurrent, False), text="End"),
-                    Label(root, text="Press to Copy Log"),
-                    Button(root, command=partial(copyLog, True)),
-                    Label(root, text=""),
-                    Entry(root),
-                    Entry(root),
-                    Button(root, command=addActivity, text="+"),
-                    Button(root, command=subtractActivity, text="-"),
-                    Button(root, command=partial(copyLog, False), text="Copy")
+        myScreen = [Label(root, text="Activity"),  # for current log
+                    Entry(root),  # for current log
+                    Button(root, command=partial(logCurrent, True), text="Start"),  # for current log
+                    Button(root, command=partial(logCurrent, False), text="End"),  # for current log
+                    Label(root, text="Press to Copy Log"),  # for current log
+                    Button(root, command=partial(copyLog, True)),  # for current log
+                    Label(root, text=""),  # for current log
+                    Entry(root),  # for past log
+                    Entry(root),  # for past log
+                    Button(root, command=addActivity, text="+"),  # for past log
+                    Button(root, command=subtractActivity, text="-"),  # for past log
+                    Button(root, command=partial(copyLog, False), text="Copy")  # for past log
                     ]
     setGrid()
 
 
 def setGrid():
-    global myScreen, firstTime
+    global myScreen, firstTime, myGrid
     if firstTime:
-        myGrid = [myScreen[0].grid(row=0, column=0),
-                  myScreen[1].grid(row=1, column=0),
-                  myScreen[2].grid(row=2, column=0),
-                  myScreen[3].grid(row=2, column=1),
-                  myScreen[4].grid(row=3, column=0),
-                  myScreen[5].grid(row=3, column=1),
-                  myScreen[6].grid(row=4, column=0),
-                  myScreen[7].grid(row=lastEventIndex, column=2),
-                  myScreen[8].grid(row=lastEventIndex, column=3),
-                  myScreen[9].grid(row=lastEventIndex + 1, column=2),
-                  myScreen[10].grid(row=lastEventIndex + 1, column=3),
-                  myScreen[11].grid(row=lastEventIndex + 2, column=2)
+        myGrid = [myScreen[0].grid(row=0, column=0),  # Label "Activity"
+                  myScreen[1].grid(row=1, column=0),  # Entry for activity in progress
+                  myScreen[2].grid(row=2, column=0),  # Button that starts activity
+                  myScreen[3].grid(row=2, column=1),  # Button that ends activity
+                  myScreen[4].grid(row=3, column=0),  # Label "Press to Copy Log"
+                  myScreen[5].grid(row=3, column=1),  # Button that Copies the log made via live input
+                  myScreen[6].grid(row=4, column=0),  # Label displays the live log
+                  myScreen[7].grid(row=lastEventIndex, column=2),  # Entry for the time on past log
+                  myScreen[8].grid(row=lastEventIndex, column=3),  # Entry for the activity on past log
+                  myScreen[9].grid(row=lastEventIndex + 1, column=2),  # Button that adds a new activity
+                  myScreen[10].grid(row=lastEventIndex + 1, column=3),  # Button that subtracts an activity
+                  myScreen[11].grid(row=lastEventIndex + 2, column=2)  # Button that copies the past log
                   ]
         firstTime = False
 

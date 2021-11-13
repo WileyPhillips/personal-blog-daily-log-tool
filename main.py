@@ -5,6 +5,8 @@ from datetime import datetime
 
 global currentTime, resultOutput, ending, lastEventIndex
 
+# ERROR broke the subtract feature in past log when separating the two log types into separate screens
+
 root = Tk()
 root.geometry("800x800")
 
@@ -89,8 +91,6 @@ def addActivity():
     myScreen[-1].grid(row=lastEventIndex + 2, column=2)
 
 
-
-
 def subtractActivity():
     global lastEventIndex
     if len(myScreen) > 12:
@@ -105,9 +105,13 @@ def subtractActivity():
         myScreen[-1].grid(row=lastEventIndex + 2, column=2)
 
 
-def setScreen():
+def setScreen(isLeft):
     global myScreen
-    if firstTime:
+    myScreen[0].destroy()
+    myScreen[1].destroy()
+    myScreen = []
+    myGrid = []
+    if isLeft:
         myScreen = [Label(root, text="Activity"),  # for current log
                     Entry(root),  # for current log
                     Button(root, command=partial(logCurrent, True), text="Start"),  # for current log
@@ -115,18 +119,23 @@ def setScreen():
                     Label(root, text="Press to Copy Log"),  # for current log
                     Button(root, command=partial(copyLog, True)),  # for current log
                     Label(root, text=""),  # for current log
-                    Entry(root),  # for past log
-                    Entry(root),  # for past log
-                    Button(root, command=addActivity, text="+"),  # for past log
-                    Button(root, command=subtractActivity, text="-"),  # for past log
-                    Button(root, command=partial(copyLog, False), text="Copy")  # for past log
                     ]
-    setGrid()
+        setGrid(True)
+    else:
+        myScreen = [
+            Entry(root),  # for past log
+            Entry(root),  # for past log
+            Button(root, command=addActivity, text="+"),  # for past log
+            Button(root, command=subtractActivity, text="-"),  # for past log
+            Button(root, command=partial(copyLog, False), text="Copy")  # for past log
+            ]
+        setGrid(False)
 
 
-def setGrid():
+
+def setGrid(isLeft):
     global myScreen, firstTime, myGrid
-    if firstTime:
+    if isLeft:
         myGrid = [myScreen[0].grid(row=0, column=0),  # Label "Activity"
                   myScreen[1].grid(row=1, column=0),  # Entry for activity in progress
                   myScreen[2].grid(row=2, column=0),  # Button that starts activity
@@ -134,16 +143,27 @@ def setGrid():
                   myScreen[4].grid(row=3, column=0),  # Label "Press to Copy Log"
                   myScreen[5].grid(row=3, column=1),  # Button that Copies the log made via live input
                   myScreen[6].grid(row=4, column=0),  # Label displays the live log
-                  myScreen[7].grid(row=lastEventIndex, column=2),  # Entry for the time on past log
-                  myScreen[8].grid(row=lastEventIndex, column=3),  # Entry for the activity on past log
-                  myScreen[9].grid(row=lastEventIndex + 1, column=2),  # Button that adds a new activity
-                  myScreen[10].grid(row=lastEventIndex + 1, column=3),  # Button that subtracts an activity
-                  myScreen[11].grid(row=lastEventIndex + 2, column=2)  # Button that copies the past log
                   ]
-        firstTime = False
+    else:
+        myGrid = [myScreen[0].grid(row=lastEventIndex, column=2),  # Entry for the time on past log
+                  myScreen[1].grid(row=lastEventIndex, column=3),  # Entry for the activity on past log
+                  myScreen[2].grid(row=lastEventIndex + 1, column=2),  # Button that adds a new activity
+                  myScreen[3].grid(row=lastEventIndex + 1, column=3),  # Button that subtracts an activity
+                  myScreen[4].grid(row=lastEventIndex + 2, column=2)  # Button that copies the past log
+                  ]
 
 
-setScreen()
+def pickLogType():
+    global myScreen, myGrid
+    myScreen = [Button(root, command=partial(setScreen, True), text="Current Log"),
+                Button(root, command=partial(setScreen, False), text="Past Log")
+                ]
+    myGrid = [myScreen[0].grid(row=0, column=0),
+              myScreen[1].grid(row=0, column=1)
+              ]
+
+
+pickLogType()
 
 root.title("Daily Log Tool")
 

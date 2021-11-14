@@ -89,11 +89,12 @@ def addActivity():
     myScreen[-3].grid(row=lastEventIndex + 1, column=2),
     myScreen[-2].grid(row=lastEventIndex + 1, column=3),
     myScreen[-1].grid(row=lastEventIndex + 2, column=2)
+    print(len(myScreen))
 
 
 def subtractActivity():
     global lastEventIndex
-    if len(myScreen) > 12:
+    if len(myScreen) > 6:
         lastEventIndex -= 1
         # Adds a new event entry along with an entry for time
         for i in range(2):

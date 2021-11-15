@@ -5,7 +5,8 @@ from datetime import datetime
 
 global currentTime, resultOutput, ending, lastEventIndex
 
-# ERROR broke the subtract feature in past log when separating the two log types into separate screens
+# ERROR resultOutput += lastTime + " - " + myScreen[i*2+2].get()+": " + myScreen[i*2+3].get() + "\n"
+# TypeError: unsupported operand type(s) for +: 'Entry' and 'str
 
 root = Tk()
 root.geometry("800x800")
@@ -74,8 +75,15 @@ def logCurrent(isStart):
 # Useful for copying the current log for external use, since you can't highlight and copy the label manually
 def copyLog(firstLog):
     global resultOutput
+    if not firstLog:
+        lastTime = myScreen[0].get()
+        resultOutput = lastTime + ": " + myScreen[1].get() + "\n"
+        for i in range(int(len(myScreen[2:-3])/2)):
+            resultOutput += lastTime + " - " + myScreen[i*2+2].get()+": " + myScreen[i*2+3].get() + "\n"
+            lastTime = myScreen[i*2+2]
     root.clipboard_clear()
     root.clipboard_append(resultOutput)
+    print(resultOutput)
 
 
 def addActivity():
@@ -107,7 +115,7 @@ def subtractActivity():
 
 
 def setScreen(isLeft):
-    global myScreen
+    global myScreen, myGrid
     myScreen[0].destroy()
     myScreen[1].destroy()
     myScreen = []

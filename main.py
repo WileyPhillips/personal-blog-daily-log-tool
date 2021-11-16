@@ -79,16 +79,13 @@ def copyLog(firstLog):
         lastTime = myScreen[0].get()
         resultOutput = lastTime + ": " + myScreen[1].get() + "\n"
         for i in range(int(len(myScreen[2:-3])/2)):
-            print(i*2+2)
-            print(myScreen[i * 2 + 2])
-            print(i * 2 + 3)
-            print(myScreen[i * 2 + 3])
-            print(myScreen)
-            resultOutput += lastTime + " - " + myScreen[i*2+2].get()+": " + myScreen[i*2+3].get() + "\n"
-            lastTime = myScreen[i*2+2]
+            newTime = myScreen[i * 2 + 2].get()
+            activity = myScreen[i * 2 + 3].get()
+
+            resultOutput += lastTime + " - " + str(newTime)+": " + str(activity) + "\n"
+            lastTime = newTime
     root.clipboard_clear()
     root.clipboard_append(resultOutput)
-    print(resultOutput)
 
 
 def addActivity():

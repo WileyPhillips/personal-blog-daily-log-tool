@@ -22,6 +22,7 @@ myScreen = []
 myGrid = []
 
 
+
 # Starts tracking an activity with an unspecified end time.
 def startSequence():
     global currentTime, currentLog
@@ -77,13 +78,17 @@ def copyLog(firstLog):
     global resultOutput
     if not firstLog:
         lastTime = myScreen[0].get()
-        resultOutput = lastTime + ": " + myScreen[1].get() + "\n"
-        for i in range(int(len(myScreen[2:-3])/2)):
+        resultOutput = "Access Daily Log - 11/15/2021 http://wileyphillips.com/daily-log-11-15-2021/\n"
+        resultOutput += "Current Streak: Daily Log - 51, Commit - 12\n"
+        resultOutput += myScreen[-3].get() + "\nToday's Goal: " + myScreen[-2].get() + "\n"
+        resultOutput += lastTime + ": " + myScreen[1].get() + "\n"
+        for i in range(int(len(myScreen[2:-6])/2)):
             newTime = myScreen[i * 2 + 2].get()
             activity = myScreen[i * 2 + 3].get()
 
             resultOutput += lastTime + " - " + str(newTime)+": " + str(activity) + "\n"
             lastTime = newTime
+        resultOutput += "In Closing: " + myScreen[-1].get()
     root.clipboard_clear()
     root.clipboard_append(resultOutput)
 
@@ -93,12 +98,12 @@ def addActivity():
     lastEventIndex += 1
     # Adds a new event entry along with an entry for time
     for i in range(2):
-        myScreen.insert(-3, Entry(root))
-        myScreen[-4].grid(row=lastEventIndex, column=i+2)
+        myScreen.insert(-6, Entry(root))
+        myScreen[-7].grid(row=lastEventIndex, column=i)
     # Moves the bottom three buttons down one row
-    myScreen[-3].grid(row=lastEventIndex + 1, column=2),
-    myScreen[-2].grid(row=lastEventIndex + 1, column=3),
-    myScreen[-1].grid(row=lastEventIndex + 2, column=2)
+    myScreen[-6].grid(row=lastEventIndex + 1, column=0),
+    myScreen[-5].grid(row=lastEventIndex + 1, column=1),
+    myScreen[-4].grid(row=lastEventIndex + 2, column=0)
 
 
 def subtractActivity():
@@ -107,12 +112,12 @@ def subtractActivity():
         lastEventIndex -= 1
         # Adds a new event entry along with an entry for time
         for i in range(2):
-            myScreen[-4].destroy()
-            myScreen.pop(-4)
+            myScreen[-7].destroy()
+            myScreen.pop(-7)
         # Moves the bottom three buttons up one row
-        myScreen[-3].grid(row=lastEventIndex + 1, column=2),
-        myScreen[-2].grid(row=lastEventIndex + 1, column=3),
-        myScreen[-1].grid(row=lastEventIndex + 2, column=2)
+        myScreen[-6].grid(row=lastEventIndex + 1, column=0),
+        myScreen[-5].grid(row=lastEventIndex + 1, column=1),
+        myScreen[-4].grid(row=lastEventIndex + 2, column=0)
 
 
 def setScreen(isLeft):
@@ -137,7 +142,10 @@ def setScreen(isLeft):
             Entry(root),  # for past log
             Button(root, command=addActivity, text="+"),  # for past log
             Button(root, command=subtractActivity, text="-"),  # for past log
-            Button(root, command=partial(copyLog, False), text="Copy")  # for past log
+            Button(root, command=partial(copyLog, False), text="Copy"),  # for past log
+            Entry(root),  # for past log
+            Entry(root),  # for past log
+            Entry(root)  # for past log
             ]
         setGrid(False)
 
@@ -155,11 +163,14 @@ def setGrid(isLeft):
                   myScreen[6].grid(row=4, column=0),  # Label displays the live log
                   ]
     else:
-        myGrid = [myScreen[0].grid(row=lastEventIndex, column=2),  # Entry for the time on past log
-                  myScreen[1].grid(row=lastEventIndex, column=3),  # Entry for the activity on past log
-                  myScreen[2].grid(row=lastEventIndex + 1, column=2),  # Button that adds a new activity
-                  myScreen[3].grid(row=lastEventIndex + 1, column=3),  # Button that subtracts an activity
-                  myScreen[4].grid(row=lastEventIndex + 2, column=2)  # Button that copies the past log
+        myGrid = [myScreen[0].grid(row=lastEventIndex, column=0),  # Entry for the time on past log
+                  myScreen[1].grid(row=lastEventIndex, column=1),  # Entry for the activity on past log
+                  myScreen[2].grid(row=lastEventIndex + 1, column=0),  # Button that adds a new activity
+                  myScreen[3].grid(row=lastEventIndex + 1, column=1),  # Button that subtracts an activity
+                  myScreen[4].grid(row=lastEventIndex + 2, column=0),  # Button that copies the past log
+                  myScreen[5].grid(row=0, column=2),
+                  myScreen[6].grid(row=1, column=2),
+                  myScreen[7].grid(row=2, column=2)
                   ]
 
 

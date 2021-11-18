@@ -1,12 +1,17 @@
+import datetime
 from functools import partial
 from tkinter import *
-from datetime import datetime, date, timedelta
+from datetime import date, timedelta, datetime
 
-global currentTime, resultOutput, ending, lastEventIndex, today, yesterday, firstSlash, secondSlash
+global currentTime, resultOutput, ending, lastEventIndex, today, yesterday, firstSlash, secondSlash, dailyLogStreak
+global commitStreak
 
 
 root = Tk()
 root.geometry("800x800")
+
+dayOneOfDailyLogStreak = datetime(2021, 9, 26)
+dayOneOfCommitStreak = datetime(2021, 11, 5)
 
 resultOutput = ""
 blankEndTime = False
@@ -20,9 +25,15 @@ td = date.today()
 yd = td - timedelta(days=1)
 today = td.strftime("%m/%d/%Y")
 yesterday = yd.strftime("%m/%d/%Y")
+
 firstSlash = yesterday.find("/")
 secondSlash = yesterday[firstSlash+1:].find("/") + firstSlash
+firstSlashToday = today.find("/")
+secondSlashToday = today[firstSlash+1:].find("/") + firstSlashToday
 
+tdAsDateTime = datetime(int(today[-4:]), int(today[:firstSlashToday]), int(today[firstSlashToday+1:secondSlashToday+1]))
+dailyLogStreak = (tdAsDateTime-dayOneOfDailyLogStreak).days
+commitStreak = (tdAsDateTime-dayOneOfCommitStreak).days + 1
 
 pastNumOfElem = 6
 
@@ -84,7 +95,7 @@ def copyLog(firstLog):
         lastTime = myScreen[0].get()
         resultOutput = "Access Daily Log - " + today +" http://wileyphillips.com/daily-log-" + yesterday[:2]
         resultOutput += "-" + yesterday[firstSlash+1:secondSlash+1] + "-" + yesterday[-4:] + "/\n"
-        resultOutput += "Current Streak: Daily Log - 51, Commit - 12\n"
+        resultOutput += "Current Streak: Daily Log - " + str(dailyLogStreak) + ", Commit - " + str(commitStreak) + "\n"
         resultOutput += myScreen[-3-(pastNumOfElem-6)].get() + "\nToday's Goal: " + myScreen[-2-(pastNumOfElem-6)].get() + "\n"
         resultOutput += lastTime + ": " + myScreen[1].get() + "\n"
         for i in range(int(len(myScreen[2:pastNumOfElem*-1])/2)):

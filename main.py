@@ -1,14 +1,9 @@
 from functools import partial
 from tkinter import *
-from datetime import datetime
+from datetime import datetime, date, timedelta
 
+global currentTime, resultOutput, ending, lastEventIndex, today, yesterday, firstSlash, secondSlash
 
-global currentTime, resultOutput, ending, lastEventIndex
-
-# ERROR resultOutput += lastTime + " - " + myScreen[i*2+2].get()+": " + myScreen[i*2+3].get() + "\n"
-# TypeError: unsupported operand type(s) for +: 'Entry' and 'str
-
-# Attempted
 
 root = Tk()
 root.geometry("800x800")
@@ -20,6 +15,14 @@ lastEventIndex = 0
 firstTime = True
 myScreen = []
 myGrid = []
+
+td = date.today()
+yd = td - timedelta(days=1)
+today = td.strftime("%m/%d/%Y")
+yesterday = yd.strftime("%m/%d/%Y")
+firstSlash = yesterday.find("/")
+secondSlash = yesterday[firstSlash+1:].find("/") + firstSlash
+
 
 pastNumOfElem = 6
 
@@ -79,14 +82,14 @@ def copyLog(firstLog):
     global resultOutput
     if not firstLog:
         lastTime = myScreen[0].get()
-        resultOutput = "Access Daily Log - 11/15/2021 http://wileyphillips.com/daily-log-11-15-2021/\n"
+        resultOutput = "Access Daily Log - " + today +" http://wileyphillips.com/daily-log-" + yesterday[:2]
+        resultOutput += "-" + yesterday[firstSlash+1:secondSlash+1] + "-" + yesterday[-4:] + "/\n"
         resultOutput += "Current Streak: Daily Log - 51, Commit - 12\n"
         resultOutput += myScreen[-3-(pastNumOfElem-6)].get() + "\nToday's Goal: " + myScreen[-2-(pastNumOfElem-6)].get() + "\n"
         resultOutput += lastTime + ": " + myScreen[1].get() + "\n"
         for i in range(int(len(myScreen[2:pastNumOfElem*-1])/2)):
             newTime = myScreen[i * 2 + 2].get()
             activity = myScreen[i * 2 + 3].get()
-
             resultOutput += lastTime + " - " + str(newTime)+": " + str(activity) + "\n"
             lastTime = newTime
         resultOutput += "In Closing: " + myScreen[-1-(pastNumOfElem-6)].get()

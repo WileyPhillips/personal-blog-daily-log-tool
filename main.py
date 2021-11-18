@@ -21,6 +21,7 @@ firstTime = True
 myScreen = []
 myGrid = []
 
+pastNumOfElem = 6
 
 
 # Starts tracking an activity with an unspecified end time.
@@ -80,15 +81,15 @@ def copyLog(firstLog):
         lastTime = myScreen[0].get()
         resultOutput = "Access Daily Log - 11/15/2021 http://wileyphillips.com/daily-log-11-15-2021/\n"
         resultOutput += "Current Streak: Daily Log - 51, Commit - 12\n"
-        resultOutput += myScreen[-3].get() + "\nToday's Goal: " + myScreen[-2].get() + "\n"
+        resultOutput += myScreen[-3-(pastNumOfElem-6)].get() + "\nToday's Goal: " + myScreen[-2-(pastNumOfElem-6)].get() + "\n"
         resultOutput += lastTime + ": " + myScreen[1].get() + "\n"
-        for i in range(int(len(myScreen[2:-6])/2)):
+        for i in range(int(len(myScreen[2:pastNumOfElem*-1])/2)):
             newTime = myScreen[i * 2 + 2].get()
             activity = myScreen[i * 2 + 3].get()
 
             resultOutput += lastTime + " - " + str(newTime)+": " + str(activity) + "\n"
             lastTime = newTime
-        resultOutput += "In Closing: " + myScreen[-1].get()
+        resultOutput += "In Closing: " + myScreen[-1-(pastNumOfElem-6)].get()
     root.clipboard_clear()
     root.clipboard_append(resultOutput)
 
@@ -98,26 +99,26 @@ def addActivity():
     lastEventIndex += 1
     # Adds a new event entry along with an entry for time
     for i in range(2):
-        myScreen.insert(-6, Entry(root))
-        myScreen[-7].grid(row=lastEventIndex, column=i)
+        myScreen.insert(-6-(pastNumOfElem-6), Entry(root))
+        myScreen[-7-(pastNumOfElem-6)].grid(row=lastEventIndex, column=i)
     # Moves the bottom three buttons down one row
-    myScreen[-6].grid(row=lastEventIndex + 1, column=0),
-    myScreen[-5].grid(row=lastEventIndex + 1, column=1),
-    myScreen[-4].grid(row=lastEventIndex + 2, column=0)
+    myScreen[-6-(pastNumOfElem-6)].grid(row=lastEventIndex + 1, column=0),
+    myScreen[-5-(pastNumOfElem-6)].grid(row=lastEventIndex + 1, column=1),
+    myScreen[-4-(pastNumOfElem-6)].grid(row=lastEventIndex + 2, column=0)
 
 
 def subtractActivity():
     global lastEventIndex
-    if len(myScreen) > 6:
+    if len(myScreen) > (2+pastNumOfElem):
         lastEventIndex -= 1
         # Adds a new event entry along with an entry for time
         for i in range(2):
-            myScreen[-7].destroy()
-            myScreen.pop(-7)
+            myScreen[-7-(pastNumOfElem-6)].destroy()
+            myScreen.pop(-7-(pastNumOfElem-6))
         # Moves the bottom three buttons up one row
-        myScreen[-6].grid(row=lastEventIndex + 1, column=0),
-        myScreen[-5].grid(row=lastEventIndex + 1, column=1),
-        myScreen[-4].grid(row=lastEventIndex + 2, column=0)
+        myScreen[-6-(pastNumOfElem-6)].grid(row=lastEventIndex + 1, column=0),
+        myScreen[-5-(pastNumOfElem-6)].grid(row=lastEventIndex + 1, column=1),
+        myScreen[-4-(pastNumOfElem-6)].grid(row=lastEventIndex + 2, column=0)
 
 
 def setScreen(isLeft):

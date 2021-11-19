@@ -93,7 +93,8 @@ def copyLog(firstLog):
     global resultOutput
     if not firstLog:
         lastTime = myScreen[0].get()
-        resultOutput = "Access Daily Log - " + today +" http://wileyphillips.com/daily-log-" + yesterday[:2]
+        resultOutput = "Daily Log - " + today + "\n"
+        resultOutput += "Access Daily Log - " + yesterday +" http://wileyphillips.com/daily-log-" + yesterday[:2]
         resultOutput += "-" + yesterday[firstSlash+1:secondSlash+1] + "-" + yesterday[-4:] + "/\n"
         resultOutput += "Current Streak: Daily Log - " + str(dailyLogStreak) + ", Commit - " + str(commitStreak) + "\n"
         resultOutput += myScreen[-3-(pastNumOfElem-6)].get() + "\nToday's Goal: " + myScreen[-2-(pastNumOfElem-6)].get() + "\n"

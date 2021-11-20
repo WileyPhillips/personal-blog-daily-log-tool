@@ -4,7 +4,7 @@ from tkinter import *
 from datetime import date, timedelta, datetime
 
 global currentTime, resultOutput, ending, lastEventIndex, today, yesterday, firstSlash, secondSlash, dailyLogStreak
-global commitStreak
+global commitStreak, pastNumOfElem
 
 
 root = Tk()
@@ -35,7 +35,6 @@ tdAsDateTime = datetime(int(today[-4:]), int(today[:firstSlashToday]), int(today
 dailyLogStreak = (tdAsDateTime-dayOneOfDailyLogStreak).days
 commitStreak = (tdAsDateTime-dayOneOfCommitStreak).days + 1
 
-pastNumOfElem = 6
 
 
 # Starts tracking an activity with an unspecified end time.
@@ -97,21 +96,21 @@ def copyLog(firstLog):
         resultOutput += "Access Daily Log - " + yesterday +" http://wileyphillips.com/daily-log-" + yesterday[:2]
         resultOutput += "-" + yesterday[firstSlash+1:secondSlash+1] + "-" + yesterday[-4:] + "/\n"
         resultOutput += "Current Streak: Daily Log - " + str(dailyLogStreak) + ", Commit - " + str(commitStreak) + "\n"
-        resultOutput += myScreen[-3-(pastNumOfElem-6)].get() + "\nToday's Goal: " + myScreen[-2-(pastNumOfElem-6)].get() + "\n"
+        resultOutput += myScreen[-3-(pastNumOfElem-6)].get() + "\nToday's Goal: " + myScreen[-2-(pastNumOfElem-6)].get() + "\n\n"
         resultOutput += lastTime + ": " + "Woke up.\n"
         for i in range(int(len(myScreen[2:pastNumOfElem*-1])/2)):
             newTime = myScreen[i * 2 + 2].get()
             activity = myScreen[i * 2 + 3].get()
             resultOutput += lastTime + " - " + str(newTime)+": " + str(activity) + "\n"
             lastTime = newTime
-        resultOutput += lastTime + ": Started night routine, and went to sleep.\n"
+        resultOutput += lastTime + ": Started night routine, and went to sleep.\n\n"
         resultOutput += "In Closing: " + myScreen[-1-(pastNumOfElem-6)].get()
     root.clipboard_clear()
     root.clipboard_append(resultOutput)
 
 
 def addActivity():
-    global lastEventIndex
+    global lastEventIndex, pastNumOfElem
     lastEventIndex += 1
     # Adds a new event entry along with an entry for time
     for i in range(2):
@@ -138,7 +137,7 @@ def subtractActivity():
 
 
 def setScreen(isLeft):
-    global myScreen, myGrid
+    global myScreen, myGrid, pastNumOfElem
     myScreen[0].destroy()
     myScreen[1].destroy()
     myScreen = []
@@ -154,16 +153,23 @@ def setScreen(isLeft):
                     ]
         setGrid(True)
     else:
+        # for past log
+        shortHand = "Short Hand\n1 Calisthenics\n2 Lifting\n3 Got ready\n4 Work\n5 Cardio\n6 Daily Log\n7 Food Log"
         myScreen = [
-            Entry(root),  # for past log
-            Label(root, text="Woke Up."),  # for past log
-            Button(root, command=addActivity, text="+"),  # for past log
-            Button(root, command=subtractActivity, text="-"),  # for past log
-            Button(root, command=partial(copyLog, False), text="Copy"),  # for past log
-            Entry(root),  # for past log
-            Entry(root),  # for past log
-            Entry(root)  # for past log
+            Entry(root),  # the time I woke up
+            Label(root, text="Woke Up."),
+            Button(root, command=addActivity, text="+"),
+            Button(root, command=subtractActivity, text="-"),
+            Button(root, command=partial(copyLog, False), text="Copy"),
+            Entry(root),  # (Intro Paragraph)
+            Entry(root),  # (Goal)
+            Entry(root),  # (Conclusion)
+            Label(root, text="Intro"),
+            Label(root, text="Goal"),
+            Label(root, text="Conclusion"),
+            Label(root, text=shortHand)
             ]
+        pastNumOfElem = len(myScreen) - 2
         setGrid(False)
 
 
@@ -180,14 +186,18 @@ def setGrid(isLeft):
                   myScreen[6].grid(row=4, column=0),  # Label displays the live log
                   ]
     else:
-        myGrid = [myScreen[0].grid(row=lastEventIndex, column=0),  # Entry for the time on past log
-                  myScreen[1].grid(row=lastEventIndex, column=1),  # Entry for the activity on past log
+        myGrid = [myScreen[0].grid(row=lastEventIndex, column=0),  # Entry for the time I woke up
+                  myScreen[1].grid(row=lastEventIndex, column=1),  # text of waking up
                   myScreen[2].grid(row=lastEventIndex + 1, column=0),  # Button that adds a new activity
                   myScreen[3].grid(row=lastEventIndex + 1, column=1),  # Button that subtracts an activity
                   myScreen[4].grid(row=lastEventIndex + 2, column=0),  # Button that copies the past log
-                  myScreen[5].grid(row=0, column=2),
-                  myScreen[6].grid(row=1, column=2),
-                  myScreen[7].grid(row=2, column=2)
+                  myScreen[5].grid(row=0, column=3),  # (Intro Paragraph)
+                  myScreen[6].grid(row=1, column=3),  # (Goal)
+                  myScreen[7].grid(row=2, column=3),  # (Conclusion)
+                  myScreen[8].grid(row=0, column=2),  # (Intro Paragraph Text)
+                  myScreen[9].grid(row=1, column=2),  # (Goal Text)
+                  myScreen[10].grid(row=2, column=2),  # (Conclusion Text)
+                  myScreen[11].grid(row=0, column=4)  # (Short hand)
                   ]
 
 

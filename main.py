@@ -98,12 +98,13 @@ def copyLog(firstLog):
         resultOutput += "-" + yesterday[firstSlash+1:secondSlash+1] + "-" + yesterday[-4:] + "/\n"
         resultOutput += "Current Streak: Daily Log - " + str(dailyLogStreak) + ", Commit - " + str(commitStreak) + "\n"
         resultOutput += myScreen[-3-(pastNumOfElem-6)].get() + "\nToday's Goal: " + myScreen[-2-(pastNumOfElem-6)].get() + "\n"
-        resultOutput += lastTime + ": " + myScreen[1].get() + "\n"
+        resultOutput += lastTime + ": " + "Woke up.\n"
         for i in range(int(len(myScreen[2:pastNumOfElem*-1])/2)):
             newTime = myScreen[i * 2 + 2].get()
             activity = myScreen[i * 2 + 3].get()
             resultOutput += lastTime + " - " + str(newTime)+": " + str(activity) + "\n"
             lastTime = newTime
+        resultOutput += lastTime + ": Started night routine, and went to sleep.\n"
         resultOutput += "In Closing: " + myScreen[-1-(pastNumOfElem-6)].get()
     root.clipboard_clear()
     root.clipboard_append(resultOutput)
@@ -155,7 +156,7 @@ def setScreen(isLeft):
     else:
         myScreen = [
             Entry(root),  # for past log
-            Entry(root),  # for past log
+            Label(root, text="Woke Up."),  # for past log
             Button(root, command=addActivity, text="+"),  # for past log
             Button(root, command=subtractActivity, text="-"),  # for past log
             Button(root, command=partial(copyLog, False), text="Copy"),  # for past log

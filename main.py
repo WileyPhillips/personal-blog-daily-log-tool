@@ -7,6 +7,9 @@ global currentTime, resultOutput, ending, lastEventIndex, today, yesterday, firs
 global commitStreak, pastNumOfElem
 
 
+# TODO Add ability to change date
+
+
 root = Tk()
 root.geometry("800x800")
 
@@ -35,6 +38,16 @@ tdAsDateTime = datetime(int(today[-4:]), int(today[:firstSlashToday]), int(today
 dailyLogStreak = (tdAsDateTime-dayOneOfDailyLogStreak).days
 commitStreak = (tdAsDateTime-dayOneOfCommitStreak).days + 1
 
+
+shortHandDict = {
+    "1": "Did some calisthenics.",
+    "2": "Did some lifting.",
+    "3": "Got ready.",
+    "4": "Went and worked a shift.",
+    "5": "Did some cardio.",
+    "6": "Worked on daily log.",
+    "7": "Updated food log."
+}
 
 
 # Starts tracking an activity with an unspecified end time.
@@ -101,6 +114,8 @@ def copyLog(firstLog):
         for i in range(int(len(myScreen[2:pastNumOfElem*-1])/2)):
             newTime = myScreen[i * 2 + 2].get()
             activity = myScreen[i * 2 + 3].get()
+            if activity in shortHandDict:
+                activity = shortHandDict.get(activity)
             resultOutput += lastTime + " - " + str(newTime)+": " + str(activity) + "\n"
             lastTime = newTime
         resultOutput += lastTime + ": Started night routine, and went to sleep.\n\n"

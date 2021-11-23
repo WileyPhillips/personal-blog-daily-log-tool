@@ -22,7 +22,7 @@ myScreen = []
 myGrid = []
 
 
-def dateChange(up):
+def date_change(up):
     global td, yd, today, yesterday, firstSlash, secondSlash, firstSlashToday, secondSlashToday, dailyLogStreak
     global commitStreak, tdAsDateTime, pastNumOfElem
     if up:
@@ -66,7 +66,7 @@ shortHandDict = {
 
 
 # Starts tracking an activity with an unspecified end time.
-def startSequence():
+def start_sequence():
     global currentTime, currentLog
     currentLog.append(currentTime + " - --:---m: " + myScreen[1].get() + "\n")
     output()
@@ -81,7 +81,7 @@ def output():
     myScreen[6].config(text=resultOutput)
 
 
-def formatTime():
+def format_time():
     global currentTime, ending
     time = datetime.now().strftime('%H:%M')
     if int(time[0:2]) > 12:
@@ -92,22 +92,22 @@ def formatTime():
         currentTime = time + ending
 
 
-def logCurrent(isStart):
+def log_current(isStart):
     global currentLog, blankEndTime, currentTime
-    formatTime()
+    format_time()
     # Checks if currently there is a start time without an accompanying end time.
     if not blankEndTime:
         # Hit to start the next task with no other activity currently in progress.
         if isStart:
             blankEndTime = True
-            startSequence()
+            start_sequence()
         # If they hit end time without an activity currently in progress nothing will occur.
     else:
         # In the case that they start logging the next activity without ending the previous
         # Uses the current time as the end time for the previous, and as the starting time for the current activity
         if isStart:
             currentLog[-1] = currentLog[-1][:currentTime.find(ending)+5] + currentTime + currentLog[-1][(currentTime.find(ending)+2)*2+3:]
-            startSequence()
+            start_sequence()
         # Replaces the end time's placeholder dashes with the current time
         else:
             blankEndTime = False
@@ -116,30 +116,30 @@ def logCurrent(isStart):
 
 
 # Useful for copying the current log for external use, since you can't highlight and copy the label manually
-def copyLog(firstLog):
+def copy_log(current_log):
     global resultOutput
-    if not firstLog:
-        lastTime = myScreen[0].get()
+    if not current_log:
+        last_time = myScreen[0].get()
         resultOutput = "Daily Log - " + today + "\n"
-        resultOutput += "Access Daily Log - " + yesterday +" http://wileyphillips.com/daily-log-" + yesterday[:2]
+        resultOutput += "Access Daily Log - " + yesterday + " http://wileyphillips.com/daily-log-" + yesterday[:2]
         resultOutput += "-" + yesterday[firstSlash+1:secondSlash+1] + "-" + yesterday[-4:] + "/\n"
         resultOutput += "Current Streak: Daily Log - " + str(dailyLogStreak) + ", Commit - " + str(commitStreak) + "\n"
         resultOutput += myScreen[-3-(pastNumOfElem-6)].get() + "\nToday's Goal: " + myScreen[-2-(pastNumOfElem-6)].get() + "\n\n"
-        resultOutput += lastTime + ": " + "Woke up.\n"
+        resultOutput += last_time + ": " + "Woke up.\n"
         for i in range(int(len(myScreen[2:pastNumOfElem*-1])/2)):
-            newTime = myScreen[i * 2 + 2].get()
+            new_time = myScreen[i * 2 + 2].get()
             activity = myScreen[i * 2 + 3].get()
             if activity in shortHandDict:
                 activity = shortHandDict.get(activity)
-            resultOutput += lastTime + " - " + str(newTime)+": " + str(activity) + "\n"
-            lastTime = newTime
-        resultOutput += lastTime + ": Went to sleep.\n\n"
+            resultOutput += last_time + " - " + str(new_time) + ": " + str(activity) + "\n"
+            last_time = new_time
+        resultOutput += last_time + ": Went to sleep.\n\n"
         resultOutput += "In Closing: " + myScreen[-1-(pastNumOfElem-6)].get()
     root.clipboard_clear()
     root.clipboard_append(resultOutput)
 
 
-def addActivity():
+def add_activity():
     global lastEventIndex, pastNumOfElem
     lastEventIndex += 1
     # Adds a new event entry along with an entry for time
@@ -152,7 +152,7 @@ def addActivity():
     myScreen[-4-(pastNumOfElem-6)].grid(row=lastEventIndex + 3, column=0)
 
 
-def subtractActivity():
+def subtract_activity():
     global lastEventIndex
     if len(myScreen) > (2+pastNumOfElem):
         lastEventIndex -= 1
@@ -165,54 +165,54 @@ def subtractActivity():
         myScreen[-5-(pastNumOfElem-6)].grid(row=lastEventIndex + 2, column=1),
         myScreen[-4-(pastNumOfElem-6)].grid(row=lastEventIndex + 3, column=0)
 
-def setScreen(isLeft):
+
+def set_screen(left):
     global myScreen, myGrid, pastNumOfElem, td
     myScreen[0].destroy()
     myScreen[1].destroy()
     myScreen = []
     myGrid = []
-    if isLeft:
+    if left:
         myScreen = [Label(root, text="Activity"),  # for current log
                     Entry(root),  # for current log
-                    Button(root, command=partial(logCurrent, True), text="Start"),  # for current log
-                    Button(root, command=partial(logCurrent, False), text="End"),  # for current log
+                    Button(root, command=partial(log_current, True), text="Start"),  # for current log
+                    Button(root, command=partial(log_current, False), text="End"),  # for current log
                     Label(root, text="Press to Copy Log"),  # for current log
-                    Button(root, command=partial(copyLog, True)),  # for current log
+                    Button(root, command=partial(copy_log, True)),  # for current log
                     Label(root, text=""),  # for current log
                     ]
-        setGrid(True)
+        set_grid(True)
     else:
         # for past log
-        shortHand = "Short Hand\n1 Calisthenics\n2 Lifting\n3 Got Ready\n4 Work\n5 Cardio\n6 Daily Log\n7 Food Log\n8"
-        shortHand += " Breakfast\n9 Lunch\n10 Dinner\n11 Snack\n12 Night Routine"
+        short_hand = "Short Hand\n1 Calisthenics\n2 Lifting\n3 Got Ready\n4 Work\n5 Cardio\n6 Daily Log\n7 Food Log\n8"
+        short_hand += " Breakfast\n9 Lunch\n10 Dinner\n11 Snack\n12 Night Routine"
         myScreen = [
             Entry(root),  # the time I woke up
             Label(root, text="Woke Up."),
-            Button(root, command=addActivity, text="+"),
-            Button(root, command=subtractActivity, text="-"),
-            Button(root, command=partial(copyLog, False), text="Copy"),
+            Button(root, command=add_activity, text="+"),
+            Button(root, command=subtract_activity, text="-"),
+            Button(root, command=partial(copy_log, False), text="Copy"),
             Entry(root),  # (Intro Paragraph)
             Entry(root),  # (Goal)
             Entry(root),  # (Conclusion)
             Label(root, text="Intro"),
             Label(root, text="Goal"),
             Label(root, text="Conclusion"),
-            Label(root, text=shortHand),
-            Button(root, command=partial(dateChange, False), text="<--"),
+            Label(root, text=short_hand),
+            Button(root, command=partial(date_change, False), text="<--"),
             Label(root, text=""),
-            Button(root, command=partial(dateChange, True), text="-->")
+            Button(root, command=partial(date_change, True), text="-->")
             ]
         pastNumOfElem = len(myScreen) - 2
-        setGrid(False)
+        set_grid(False)
         td = date.today()
         td = td - timedelta(days=1)
-        dateChange(True)
+        date_change(True)
 
 
-
-def setGrid(isLeft):
+def set_grid(left):
     global myScreen, firstTime, myGrid
-    if isLeft:
+    if left:
         myGrid = [myScreen[0].grid(row=0, column=0),  # Label "Activity"
                   myScreen[1].grid(row=1, column=0),  # Entry for activity in progress
                   myScreen[2].grid(row=2, column=0),  # Button that starts activity
@@ -240,17 +240,17 @@ def setGrid(isLeft):
                   ]
 
 
-def pickLogType():
+def pick_log_type():
     global myScreen, myGrid
-    myScreen = [Button(root, command=partial(setScreen, True), text="Current Log"),
-                Button(root, command=partial(setScreen, False), text="Past Log")
+    myScreen = [Button(root, command=partial(set_screen, True), text="Current Log"),
+                Button(root, command=partial(set_screen, False), text="Past Log")
                 ]
     myGrid = [myScreen[0].grid(row=0, column=0),
               myScreen[1].grid(row=0, column=1)
               ]
 
 
-pickLogType()
+pick_log_type()
 
 root.title("Daily Log Tool")
 

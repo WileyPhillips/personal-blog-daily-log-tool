@@ -4,10 +4,7 @@ from tkinter import *
 from datetime import date, timedelta, datetime
 
 global currentTime, resultOutput, ending, lastEventIndex, today, yesterday, firstSlash, secondSlash, dailyLogStreak
-global commitStreak, pastNumOfElem
-
-
-# TODO Add ability to change date
+global commitStreak, pastNumOfElem, dayOneOfDailyLogStreak, dayOneOfCommitStreak, td
 
 
 root = Tk()
@@ -24,19 +21,32 @@ firstTime = True
 myScreen = []
 myGrid = []
 
-td = date.today()
-yd = td - timedelta(days=1)
-today = td.strftime("%m/%d/%Y")
-yesterday = yd.strftime("%m/%d/%Y")
 
-firstSlash = yesterday.find("/")
-secondSlash = yesterday[firstSlash+1:].find("/") + firstSlash
-firstSlashToday = today.find("/")
-secondSlashToday = today[firstSlash+1:].find("/") + firstSlashToday
+def dateChange(up):
+    global td, yd, today, yesterday, firstSlash, secondSlash, firstSlashToday, secondSlashToday, dailyLogStreak
+    global commitStreak, tdAsDateTime, pastNumOfElem
+    if up:
+        td = td + timedelta(days=1)
+    else:
+        td = td - timedelta(days=1)
+    yd = td - timedelta(days=1)
+    today = td.strftime("%m/%d/%Y")
+    yesterday = yd.strftime("%m/%d/%Y")
 
-tdAsDateTime = datetime(int(today[-4:]), int(today[:firstSlashToday]), int(today[firstSlashToday+1:secondSlashToday+1]))
-dailyLogStreak = (tdAsDateTime-dayOneOfDailyLogStreak).days
-commitStreak = (tdAsDateTime-dayOneOfCommitStreak).days + 1
+    firstSlash = yesterday.find("/")
+    secondSlash = yesterday[firstSlash + 1:].find("/") + firstSlash
+    firstSlashToday = today.find("/")
+    secondSlashToday = today[firstSlash + 1:].find("/") + firstSlashToday
+
+    tdAsDateTime = datetime(int(today[-4:]), int(today[:firstSlashToday]),
+                            int(today[firstSlashToday + 1:secondSlashToday + 1]))
+    dailyLogStreak = (tdAsDateTime - dayOneOfDailyLogStreak).days
+    commitStreak = (tdAsDateTime - dayOneOfCommitStreak).days + 1
+
+    print(myScreen[-7 - (pastNumOfElem - 6)])
+    print(today)
+    print(pastNumOfElem)
+    myScreen[-2 - (pastNumOfElem - 13)].config(text=today)
 
 
 shortHandDict = {
@@ -46,7 +56,12 @@ shortHandDict = {
     "4": "Went and worked a shift.",
     "5": "Did some cardio.",
     "6": "Worked on daily log.",
-    "7": "Updated food log."
+    "7": "Updated food log.",
+    "8": "Ate breakfast.",
+    "9": "Ate lunch.",
+    "10": "Ate Dinner.",
+    "11": "Had a snack.",
+    "12": "Went through night routine."
 }
 
 
@@ -118,7 +133,7 @@ def copyLog(firstLog):
                 activity = shortHandDict.get(activity)
             resultOutput += lastTime + " - " + str(newTime)+": " + str(activity) + "\n"
             lastTime = newTime
-        resultOutput += lastTime + ": Started night routine, and went to sleep.\n\n"
+        resultOutput += lastTime + ": Went to sleep.\n\n"
         resultOutput += "In Closing: " + myScreen[-1-(pastNumOfElem-6)].get()
     root.clipboard_clear()
     root.clipboard_append(resultOutput)
@@ -130,11 +145,11 @@ def addActivity():
     # Adds a new event entry along with an entry for time
     for i in range(2):
         myScreen.insert(-6-(pastNumOfElem-6), Entry(root))
-        myScreen[-7-(pastNumOfElem-6)].grid(row=lastEventIndex, column=i)
+        myScreen[-7-(pastNumOfElem-6)].grid(row=lastEventIndex+1, column=i)
     # Moves the bottom three buttons down one row
-    myScreen[-6-(pastNumOfElem-6)].grid(row=lastEventIndex + 1, column=0),
-    myScreen[-5-(pastNumOfElem-6)].grid(row=lastEventIndex + 1, column=1),
-    myScreen[-4-(pastNumOfElem-6)].grid(row=lastEventIndex + 2, column=0)
+    myScreen[-6-(pastNumOfElem-6)].grid(row=lastEventIndex + 2, column=0),
+    myScreen[-5-(pastNumOfElem-6)].grid(row=lastEventIndex + 2, column=1),
+    myScreen[-4-(pastNumOfElem-6)].grid(row=lastEventIndex + 3, column=0)
 
 
 def subtractActivity():
@@ -146,13 +161,12 @@ def subtractActivity():
             myScreen[-7-(pastNumOfElem-6)].destroy()
             myScreen.pop(-7-(pastNumOfElem-6))
         # Moves the bottom three buttons up one row
-        myScreen[-6-(pastNumOfElem-6)].grid(row=lastEventIndex + 1, column=0),
-        myScreen[-5-(pastNumOfElem-6)].grid(row=lastEventIndex + 1, column=1),
-        myScreen[-4-(pastNumOfElem-6)].grid(row=lastEventIndex + 2, column=0)
-
+        myScreen[-6-(pastNumOfElem-6)].grid(row=lastEventIndex + 2, column=0),
+        myScreen[-5-(pastNumOfElem-6)].grid(row=lastEventIndex + 2, column=1),
+        myScreen[-4-(pastNumOfElem-6)].grid(row=lastEventIndex + 3, column=0)
 
 def setScreen(isLeft):
-    global myScreen, myGrid, pastNumOfElem
+    global myScreen, myGrid, pastNumOfElem, td
     myScreen[0].destroy()
     myScreen[1].destroy()
     myScreen = []
@@ -169,7 +183,8 @@ def setScreen(isLeft):
         setGrid(True)
     else:
         # for past log
-        shortHand = "Short Hand\n1 Calisthenics\n2 Lifting\n3 Got ready\n4 Work\n5 Cardio\n6 Daily Log\n7 Food Log"
+        shortHand = "Short Hand\n1 Calisthenics\n2 Lifting\n3 Got Ready\n4 Work\n5 Cardio\n6 Daily Log\n7 Food Log\n8"
+        shortHand += " Breakfast\n9 Lunch\n10 Dinner\n11 Snack\n12 Night Routine"
         myScreen = [
             Entry(root),  # the time I woke up
             Label(root, text="Woke Up."),
@@ -182,10 +197,16 @@ def setScreen(isLeft):
             Label(root, text="Intro"),
             Label(root, text="Goal"),
             Label(root, text="Conclusion"),
-            Label(root, text=shortHand)
+            Label(root, text=shortHand),
+            Button(root, command=partial(dateChange, False), text="<--"),
+            Label(root, text=""),
+            Button(root, command=partial(dateChange, True), text="-->")
             ]
         pastNumOfElem = len(myScreen) - 2
         setGrid(False)
+        td = date.today()
+        td = td - timedelta(days=1)
+        dateChange(True)
 
 
 
@@ -201,18 +222,21 @@ def setGrid(isLeft):
                   myScreen[6].grid(row=4, column=0),  # Label displays the live log
                   ]
     else:
-        myGrid = [myScreen[0].grid(row=lastEventIndex, column=0),  # Entry for the time I woke up
-                  myScreen[1].grid(row=lastEventIndex, column=1),  # text of waking up
-                  myScreen[2].grid(row=lastEventIndex + 1, column=0),  # Button that adds a new activity
-                  myScreen[3].grid(row=lastEventIndex + 1, column=1),  # Button that subtracts an activity
-                  myScreen[4].grid(row=lastEventIndex + 2, column=0),  # Button that copies the past log
-                  myScreen[5].grid(row=0, column=3),  # (Intro Paragraph)
-                  myScreen[6].grid(row=1, column=3),  # (Goal)
-                  myScreen[7].grid(row=2, column=3),  # (Conclusion)
-                  myScreen[8].grid(row=0, column=2),  # (Intro Paragraph Text)
-                  myScreen[9].grid(row=1, column=2),  # (Goal Text)
-                  myScreen[10].grid(row=2, column=2),  # (Conclusion Text)
-                  myScreen[11].grid(row=0, column=4)  # (Short hand)
+        myGrid = [myScreen[0].grid(row=lastEventIndex + 1, column=0),  # Entry for the time I woke up
+                  myScreen[1].grid(row=lastEventIndex + 1, column=1),  # text of waking up
+                  myScreen[2].grid(row=lastEventIndex + 2, column=0),  # Button that adds a new activity
+                  myScreen[3].grid(row=lastEventIndex + 2, column=1),  # Button that subtracts an activity
+                  myScreen[4].grid(row=lastEventIndex + 3, column=0),  # Button that copies the past log
+                  myScreen[5].grid(row=1, column=3),  # (Intro Paragraph)
+                  myScreen[6].grid(row=2, column=3),  # (Goal)
+                  myScreen[7].grid(row=3, column=3),  # (Conclusion)
+                  myScreen[8].grid(row=1, column=2),  # (Intro Paragraph Text)
+                  myScreen[9].grid(row=2, column=2),  # (Goal Text)
+                  myScreen[10].grid(row=3, column=2),  # (Conclusion Text)
+                  myScreen[11].grid(row=1, column=4),  # (Short hand)
+                  myScreen[12].grid(row=0, column=0),  # (Date down)
+                  myScreen[13].grid(row=0, column=1),  # (Date Text)
+                  myScreen[14].grid(row=0, column=2)  # (Date up)
                   ]
 
 

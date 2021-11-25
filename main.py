@@ -122,9 +122,9 @@ def copy_log(current_log):
         last_time = myScreen[0].get()
         resultOutput = "Daily Log - " + today + "\n"
         resultOutput += "Access Daily Log - " + yesterday + " http://wileyphillips.com/daily-log-" + yesterday[:2]
-        resultOutput += "-" + yesterday[firstSlash+1:secondSlash+1] + "-" + yesterday[-4:] + "/\n"
+        resultOutput += "-" + yesterday[firstSlash+1:secondSlash+1] + "-" + yesterday[-4:] + "/\n\n"
         resultOutput += "Current Streak: Daily Log - " + str(dailyLogStreak) + ", Commit - " + str(commitStreak) + "\n"
-        resultOutput += myScreen[-3-(pastNumOfElem-6)].get() + "\nToday's Goal: " + myScreen[-2-(pastNumOfElem-6)].get() + "\n\n"
+        resultOutput += myScreen[-3-(pastNumOfElem-6)].get() + "\n\nToday's Goal: " + myScreen[-2-(pastNumOfElem-6)].get() + "\n\n"
         resultOutput += last_time + ": " + "Woke up.\n"
         for i in range(int(len(myScreen[2:pastNumOfElem*-1])/2)):
             new_time = myScreen[i * 2 + 2].get()

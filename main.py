@@ -3,12 +3,9 @@ from functools import partial
 from tkinter import *
 from datetime import date, timedelta, datetime
 
-global currentTime, resultOutput, ending, lastEventIndex, today, yesterday, firstSlash, secondSlash, dailyLogStreak
-global commitStreak, pastNumOfElem, dayOneOfDailyLogStreak, dayOneOfCommitStreak, td
-
-
 root = Tk()
 root.geometry("800x800")
+
 
 dayOneOfDailyLogStreak = datetime(2021, 9, 26)
 dayOneOfCommitStreak = datetime(2021, 11, 5)
@@ -42,10 +39,6 @@ def date_change(up):
                             int(today[firstSlashToday + 1:secondSlashToday + 1]))
     dailyLogStreak = (tdAsDateTime - dayOneOfDailyLogStreak).days
     commitStreak = (tdAsDateTime - dayOneOfCommitStreak).days + 1
-
-    print(myScreen[-7 - (pastNumOfElem - 6)])
-    print(today)
-    print(pastNumOfElem)
     myScreen[-2 - (pastNumOfElem - 13)].config(text=today)
 
 
@@ -208,6 +201,7 @@ def set_screen(left):
         td = date.today()
         td = td - timedelta(days=1)
         date_change(True)
+        print(lastEventIndex)
 
 
 def set_grid(left):

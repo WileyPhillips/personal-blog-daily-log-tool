@@ -6,6 +6,7 @@ from datetime import date, timedelta, datetime
 root = Tk()
 root.geometry("800x800")
 
+# TODO Rebuild from the ground up.
 
 dayOneOfDailyLogStreak = datetime(2021, 9, 26)
 dayOneOfCommitStreak = datetime(2021, 11, 5)

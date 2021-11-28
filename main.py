@@ -7,6 +7,9 @@ root = Tk()
 root.geometry("800x800")
 
 # TODO Rebuild from the ground up.
+# Have screen elements in a list, but have that list consist of lists to separate things like events.
+# Just have past log
+# Have intro and goal next to eachother and date so the lines taken up are minimized.
 
 dayOneOfDailyLogStreak = datetime(2021, 9, 26)
 dayOneOfCommitStreak = datetime(2021, 11, 5)
@@ -19,7 +22,7 @@ firstTime = True
 myScreen = []
 myGrid = []
 
-
+""" keep the following
 def date_change(up):
     global td, yd, today, yesterday, firstSlash, secondSlash, firstSlashToday, secondSlashToday, dailyLogStreak
     global commitStreak, tdAsDateTime, pastNumOfElem
@@ -40,6 +43,8 @@ def date_change(up):
                             int(today[firstSlashToday + 1:secondSlashToday + 1]))
     dailyLogStreak = (tdAsDateTime - dayOneOfDailyLogStreak).days
     commitStreak = (tdAsDateTime - dayOneOfCommitStreak).days + 1
+    
+    this part may need editing
     myScreen[-2 - (pastNumOfElem - 13)].config(text=today)
 
 
@@ -62,7 +67,7 @@ shortHandDict = {
 # Starts tracking an activity with an unspecified end time.
 def start_sequence():
     global currentTime, currentLog
-    currentLog.append(currentTime + " - --:---m: " + myScreen[1].get() + "\n")
+    currentLog.append(currentTime + " - --:---m: " + myScreen[tbd].get() + "\n")
     output()
 
 
@@ -72,7 +77,7 @@ def output():
     # each string in the list is to be on a separate line.
     for i in range(len(currentLog)):
         resultOutput += currentLog[i] + "\n"
-    myScreen[6].config(text=resultOutput)
+    myScreen[tbd].config(text=resultOutput)
 
 
 def format_time():

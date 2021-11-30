@@ -16,8 +16,6 @@ blankEndTime = False
 currentLog = []
 lastEventIndex = 0
 firstTime = True
-myScreen = []
-myGrid = []
 
 
 def date_change(up):
@@ -60,10 +58,20 @@ shortHandDict = {
 
 
 def set_screen():
-    global myScreen, td
+    global myScreen, td, topElements
     topElements = [
+        Button(root, command=partial(date_change, False)),
+        Label(root, text=""),
+        Button(root, command=partial(date_change, True)),
+        Label(root, text="Intro"),
+        Entry(root),
+        Label(root, text="Goal"),
+        Entry(root),
+        Label(root, text="Conclusion"),
+        Entry(root),
+        Label(root, text="Change Event Total"),
         Button(root),
-        Label(root, text="")
+        Button(root)
     ]
     events = []
     myScreen = [
@@ -73,12 +81,28 @@ def set_screen():
     set_grid()
     td = date.today()
     td = td - timedelta(days=1)
-    date_change()
+    date_change(True)
 
 
 def set_grid():
-    print("placeholder")
+    global myGrid, topElements
+    myGrid = [
+        topElements[0].grid(row=0, column=0),
+        topElements[1].grid(row=0, column=1),
+        topElements[2].grid(row=0, column=2),
+        topElements[3].grid(row=0, column=3),
+        topElements[4].grid(row=0, column=4),
+        topElements[5].grid(row=0, column=5),
+        topElements[6].grid(row=0, column=6),
+        topElements[7].grid(row=0, column=7),
+        topElements[8].grid(row=0, column=8),
+        topElements[9].grid(row=0, column=9),
+        topElements[10].grid(row=0, column=10),
+        topElements[11].grid(row=0, column=11)
+    ]
+
 
 root.title("Daily Log Tool")
+set_screen()
 
 root.mainloop()

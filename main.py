@@ -58,7 +58,8 @@ shortHandDict = {
 
 
 def set_screen():
-    global myScreen, td, topElements
+    global myScreen, td, topElements, events
+    events = []
     topElements = [
         Button(root, command=partial(date_change, False)),
         Label(root, text=""),
@@ -70,10 +71,9 @@ def set_screen():
         Label(root, text="Conclusion"),
         Entry(root),
         Label(root, text="Change Event Total"),
-        Button(root),
-        Button(root)
+        Button(root, command=add_activity),
+        Button(root, command=sub_activity)
     ]
-    events = []
     myScreen = [
         topElements,
         events
@@ -100,6 +100,26 @@ def set_grid():
         topElements[10].grid(row=0, column=10),
         topElements[11].grid(row=0, column=11)
     ]
+
+
+def add_activity():
+    global events
+    print(len(events))
+    events.append(Entry(root))
+    events[-1].grid(row=int(((len(events)-1)/2)+1), column=0)
+    events.append(Entry(root))
+    events[-1].grid(row=int(((len(events) - 2) / 2) + 1), column=1)
+    print(len(events))
+
+# ERROR doesn't remove from screen
+def sub_activity():
+    global events
+    print(len(events))
+    if len(events) > 0:
+        for i in range(2):
+            events[-1].destroy
+            events.pop(-1)
+    print(len(events))
 
 
 root.title("Daily Log Tool")

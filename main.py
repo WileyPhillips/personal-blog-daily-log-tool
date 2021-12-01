@@ -6,7 +6,6 @@ from datetime import date, timedelta, datetime
 root = Tk()
 root.geometry("1920x1080")
 
-
 dayOneOfDailyLogStreak = datetime(2021, 9, 26)
 dayOneOfCommitStreak = datetime(2021, 11, 5)
 streaks = [dayOneOfDailyLogStreak, dayOneOfCommitStreak]
@@ -28,15 +27,15 @@ def date_change(up):
     today = td.strftime("%m/%d/%Y")
     yesterday = yd.strftime("%m/%d/%Y")
 
-    firstSlash = yesterday.find("/")
-    secondSlash = yesterday[firstSlash + 1:].find("/") + firstSlash
-    firstSlashToday = today.find("/")
-    secondSlashToday = today[firstSlash + 1:].find("/") + firstSlashToday
+    first_slash = yesterday.find("/")
+    second_slash = yesterday[first_slash + 1:].find("/") + first_slash
+    first_slash_today = today.find("/")
+    second_slash_today = today[first_slash + 1:].find("/") + first_slash_today
 
-    tdAsDateTime = datetime(int(today[-4:]), int(today[:firstSlashToday]),
-                            int(today[firstSlashToday + 1:secondSlashToday + 1]))
-    dailyLogStreak = (tdAsDateTime - dayOneOfDailyLogStreak).days
-    commitStreak = (tdAsDateTime - dayOneOfCommitStreak).days + 1
+    td_as_date_time = datetime(int(today[-4:]), int(today[:first_slash_today]),
+                               int(today[first_slash_today + 1:second_slash_today + 1]))
+    daily_log_streak = (td_as_date_time - dayOneOfDailyLogStreak).days
+    commit_streak = (td_as_date_time - dayOneOfCommitStreak).days + 1
 
     myScreen[0][1].config(text=today)
 
@@ -61,9 +60,9 @@ def set_screen():
     global myScreen, td, topElements, events
     events = []
     topElements = [
-        Button(root, command=partial(date_change, False)),
+        Button(root, command=partial(date_change, False), text="<--"),
         Label(root, text=""),
-        Button(root, command=partial(date_change, True)),
+        Button(root, command=partial(date_change, True), text="-->"),
         Label(root, text="Intro"),
         Entry(root),
         Label(root, text="Goal"),
@@ -71,8 +70,8 @@ def set_screen():
         Label(root, text="Conclusion"),
         Entry(root),
         Label(root, text="Change Event Total"),
-        Button(root, command=add_activity),
-        Button(root, command=sub_activity)
+        Button(root, command=add_activity, text="+"),
+        Button(root, command=sub_activity, text="-")
     ]
     myScreen = [
         topElements,
@@ -103,23 +102,17 @@ def set_grid():
 
 
 def add_activity():
-    global events
-    print(len(events))
     events.append(Entry(root))
-    events[-1].grid(row=int(((len(events)-1)/2)+1), column=0)
+    events[-1].grid(row=int(((len(events) - 1) / 2) + 1), column=0)
     events.append(Entry(root))
     events[-1].grid(row=int(((len(events) - 2) / 2) + 1), column=1)
-    print(len(events))
 
-# ERROR doesn't remove from screen
+
 def sub_activity():
-    global events
-    print(len(events))
     if len(events) > 0:
         for i in range(2):
-            events[-1].destroy
+            events[-1].destroy()
             events.pop(-1)
-    print(len(events))
 
 
 root.title("Daily Log Tool")

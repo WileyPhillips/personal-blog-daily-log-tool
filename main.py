@@ -52,7 +52,8 @@ shortHandDict = {
     "9": "Ate lunch.",
     "10": "Ate Dinner.",
     "11": "Had a snack.",
-    "12": "Went through night routine."
+    "12": "Weighed, and checked body composition.",
+    "13": "Went through night routine."
 }
 
 
@@ -85,27 +86,32 @@ def set_screen():
 
 def set_grid():
     global myGrid, topElements
+    event_col = (len(events)//80)*2
     myGrid = [
-        topElements[0].grid(row=0, column=0),
-        topElements[1].grid(row=0, column=1),
-        topElements[2].grid(row=0, column=2),
-        topElements[3].grid(row=0, column=3),
-        topElements[4].grid(row=0, column=4),
-        topElements[5].grid(row=0, column=5),
-        topElements[6].grid(row=0, column=6),
-        topElements[7].grid(row=0, column=7),
-        topElements[8].grid(row=0, column=8),
-        topElements[9].grid(row=0, column=9),
-        topElements[10].grid(row=0, column=10),
-        topElements[11].grid(row=0, column=11)
+        topElements[0].grid(row=0, column=0+event_col),
+        topElements[1].grid(row=0, column=1+event_col),
+        topElements[2].grid(row=0, column=2+event_col),
+        topElements[3].grid(row=0, column=3+event_col),
+        topElements[4].grid(row=0, column=4+event_col),
+        topElements[5].grid(row=0, column=5+event_col),
+        topElements[6].grid(row=0, column=6+event_col),
+        topElements[7].grid(row=0, column=7+event_col),
+        topElements[8].grid(row=0, column=8+event_col),
+        topElements[9].grid(row=0, column=9+event_col),
+        topElements[10].grid(row=0, column=10+event_col),
+        topElements[11].grid(row=0, column=11+event_col)
     ]
 
 
 def add_activity():
-    events.append(Entry(root))
-    events[-1].grid(row=int(((len(events) - 1) / 2) + 1), column=0)
-    events.append(Entry(root))
-    events[-1].grid(row=int(((len(events) - 2) / 2) + 1), column=1)
+    if len(events) < 160:
+        event_col = len(events) // 80
+        events.append(Entry(root))
+        events[-1].grid(row=int((((len(events) - 1) / 2) + 1)-40*event_col), column=0+event_col*2)
+        events.append(Entry(root))
+        events[-1].grid(row=int((((len(events) - 2) / 2) + 1)-40*event_col), column=1+event_col*2)
+        if len(events) == 80:
+            set_grid()
 
 
 def sub_activity():

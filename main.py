@@ -72,7 +72,8 @@ def set_screen():
         Entry(root),
         Label(root, text="Change Event Total"),
         Button(root, command=add_activity, text="+"),
-        Button(root, command=sub_activity, text="-")
+        Button(root, command=sub_activity, text="-"),
+        Button(root, command=copy_log, text="copy")
     ]
     myScreen = [
         topElements,
@@ -99,7 +100,8 @@ def set_grid():
         topElements[8].grid(row=0, column=8+event_col),
         topElements[9].grid(row=0, column=9+event_col),
         topElements[10].grid(row=0, column=10+event_col),
-        topElements[11].grid(row=0, column=11+event_col)
+        topElements[11].grid(row=0, column=11+event_col),
+        topElements[12].grid(row=1, column=7)
     ]
 
 
@@ -119,6 +121,23 @@ def sub_activity():
         for i in range(2):
             events[-1].destroy()
             events.pop(-1)
+
+
+def copy_log():
+    resultOutput = ""
+    for i in range(int(len(events[:]) / 2)):
+        newTime = events[i * 2].get()
+        activity = events[i * 2 + 1].get()
+        if activity in shortHandDict:
+            activity = shortHandDict.get(activity)
+        resultOutput += lastTime + " - " + str(newTime) + ": " + str(activity) + "\n"
+        lastTime = newTime
+    resultOutput += lastTime + ": Started night routine, and went to sleep.\n\n"
+    resultOutput += "In Closing: " + topElements[8].get()
+
+
+root.clipboard_clear()
+root.clipboard_append(resultOutput)
 
 
 root.title("Daily Log Tool")

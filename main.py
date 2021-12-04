@@ -3,6 +3,9 @@ from functools import partial
 from tkinter import *
 from datetime import date, timedelta, datetime
 
+
+# TODO solve commit and daily streak variance
+
 root = Tk()
 root.geometry("1920x1080")
 
@@ -18,7 +21,7 @@ firstTime = True
 
 
 def date_change(up):
-    global td, yesterday
+    global td, yesterday, firstSlash, secondSlash, today, dailyLogStreak, commitStreak
     if up:
         td = td + timedelta(days=1)
     else:
@@ -27,16 +30,24 @@ def date_change(up):
     today = td.strftime("%m/%d/%Y")
     yesterday = yd.strftime("%m/%d/%Y")
 
-    first_slash = yesterday.find("/")
-    second_slash = yesterday[first_slash + 1:].find("/") + first_slash
+    firstSlash = yesterday.find("/")
+    secondSlash = yesterday[firstSlash + 1:].find("/") + firstSlash
     first_slash_today = today.find("/")
-    second_slash_today = today[first_slash + 1:].find("/") + first_slash_today
+    second_slash_today = today[firstSlash + 1:].find("/") + first_slash_today
 
+    if today[first_slash_today + 1] == "0":
+        today = today[:first_slash_today+1] + today[first_slash_today+2:]
+        second_slash_today = today[firstSlash + 1:].find("/") + first_slash_today
+    if yesterday[firstSlash + 1] == "0":
+        yesterday = yesterday[:firstSlash + 1] + yesterday[firstSlash + 2:]
+        secondSlash = yesterday[firstSlash + 1:].find("/") + firstSlash
+
+    print(today+yesterday)
     td_as_date_time = datetime(int(today[-4:]), int(today[:first_slash_today]),
                                int(today[first_slash_today + 1:second_slash_today + 1]))
-    daily_log_streak = (td_as_date_time - dayOneOfDailyLogStreak).days
-    commit_streak = (td_as_date_time - dayOneOfCommitStreak).days + 1
-
+    dailyLogStreak = (td_as_date_time - dayOneOfDailyLogStreak).days
+    commitStreak = (td_as_date_time - dayOneOfCommitStreak).days + 1
+    print(td_as_date_time)
     myScreen[0][1].config(text=today)
 
 
@@ -59,7 +70,10 @@ shortHandDict = {
 
 def set_screen():
     global myScreen, td, topElements, events
-    events = []
+    events = [
+        Entry(root),
+        Label(root, text="Wake Up.")
+    ]
     topElements = [
         Button(root, command=partial(date_change, False), text="<--"),
         Label(root, text=""),
@@ -101,7 +115,9 @@ def set_grid():
         topElements[9].grid(row=0, column=9+event_col),
         topElements[10].grid(row=0, column=10+event_col),
         topElements[11].grid(row=0, column=11+event_col),
-        topElements[12].grid(row=1, column=7)
+        topElements[12].grid(row=1, column=7),
+        events[0].grid(row=1, column=0),
+        events[1].grid(row=1, column=1)
     ]
 
 
@@ -117,27 +133,32 @@ def add_activity():
 
 
 def sub_activity():
-    if len(events) > 0:
+    if len(events) > 2:
         for i in range(2):
             events[-1].destroy()
             events.pop(-1)
 
 
 def copy_log():
-    resultOutput = ""
-    for i in range(int(len(events[:]) / 2)):
-        newTime = events[i * 2].get()
-        activity = events[i * 2 + 1].get()
+    last_time = events[0].get()
+    result_output = "Daily Log - " + today + "\n"
+    result_output += "Access Daily Log - " + yesterday + " http://wileyphillips.com/daily-log-" + yesterday[:2]
+    result_output += "-" + yesterday[firstSlash + 1:secondSlash + 1] + "-" + yesterday[-4:] + "/\n"
+    result_output += "Current Streak: Daily Log - " + str(dailyLogStreak) + ", Commit - " + str(commitStreak) + "\n"
+    result_output += topElements[4].get() + "\nToday's Goal: " + topElements[6].get() + "\n\n"
+    result_output += last_time + ": " + "Woke up.\n"
+    for i in range(int(len(events[2:]) / 2)):
+        new_time = events[i * 2 + 2].get()
+        activity = events[i * 2 + 3].get()
         if activity in shortHandDict:
             activity = shortHandDict.get(activity)
-        resultOutput += lastTime + " - " + str(newTime) + ": " + str(activity) + "\n"
-        lastTime = newTime
-    resultOutput += lastTime + ": Started night routine, and went to sleep.\n\n"
-    resultOutput += "In Closing: " + topElements[8].get()
+        result_output += last_time + " - " + str(new_time) + ": " + str(activity) + "\n"
+        last_time = new_time
+    result_output += last_time + ": Went to sleep.\n\n"
+    result_output += "In Closing: " + topElements[8].get()
 
-
-root.clipboard_clear()
-root.clipboard_append(resultOutput)
+    root.clipboard_clear()
+    root.clipboard_append(result_output)
 
 
 root.title("Daily Log Tool")

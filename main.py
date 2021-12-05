@@ -1,6 +1,7 @@
 import datetime
 from functools import partial
 from tkinter import *
+# from tkinter.ttk import *
 from datetime import date, timedelta, datetime
 
 
@@ -68,6 +69,13 @@ shortHandDict = {
 }
 
 
+def set_shorthand():
+    for i in range(len(shortHandDict)):
+        short_hand_text = str(i+1) + " - " + shortHandDict.get(str(i+1))
+        short_hand_label = Label(root, text=short_hand_text)
+        short_hand_label.grid(row=2+i, column=7)
+
+
 def set_screen():
     global myScreen, td, topElements, events
     events = [
@@ -94,6 +102,7 @@ def set_screen():
         events
     ]
     set_grid()
+    set_shorthand()
     td = date.today()
     td = td - timedelta(days=1)
     date_change(True)
@@ -101,7 +110,7 @@ def set_screen():
 
 def set_grid():
     global myGrid, topElements
-    event_col = (len(events)//80)*2
+    event_col = (len(events)//78)*2
     myGrid = [
         topElements[0].grid(row=0, column=0+event_col),
         topElements[1].grid(row=0, column=1+event_col),
@@ -122,13 +131,13 @@ def set_grid():
 
 
 def add_activity():
-    if len(events) < 160:
-        event_col = len(events) // 80
+    if len(events) < 156:
+        event_col = len(events) // 78
         events.append(Entry(root))
-        events[-1].grid(row=int((((len(events) - 1) / 2) + 1)-40*event_col), column=0+event_col*2)
+        events[-1].grid(row=int((((len(events) - 1) / 2) + 1)-38*event_col), column=0+event_col*2)
         events.append(Entry(root))
-        events[-1].grid(row=int((((len(events) - 2) / 2) + 1)-40*event_col), column=1+event_col*2)
-        if len(events) == 80:
+        events[-1].grid(row=int((((len(events) - 2) / 2) + 1)-38*event_col), column=1+event_col*2)
+        if len(events) == 78:
             set_grid()
 
 

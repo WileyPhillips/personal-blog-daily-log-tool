@@ -19,6 +19,7 @@ blankEndTime = False
 currentLog = []
 lastEventIndex = 0
 firstTime = True
+numEvents = 38
 
 
 def date_change(up):
@@ -110,7 +111,7 @@ def set_screen():
 
 def set_grid():
     global myGrid, topElements
-    event_col = (len(events)//78)*2
+    event_col = (len(events)//(numEvents*2))*2
     myGrid = [
         topElements[0].grid(row=0, column=0+event_col),
         topElements[1].grid(row=0, column=1+event_col),
@@ -131,13 +132,13 @@ def set_grid():
 
 
 def add_activity():
-    if len(events) < 156:
-        event_col = len(events) // 78
+    if len(events) < numEvents * 4:
+        event_col = len(events) // (numEvents * 2)
         events.append(Entry(root))
-        events[-1].grid(row=int((((len(events) - 1) / 2) + 1)-38*event_col), column=0+event_col*2)
+        events[-1].grid(row=int((((len(events) - 1) / 2) + 1)-numEvents*event_col), column=0+event_col*2)
         events.append(Entry(root))
-        events[-1].grid(row=int((((len(events) - 2) / 2) + 1)-38*event_col), column=1+event_col*2)
-        if len(events) == 78:
+        events[-1].grid(row=int((((len(events) - 2) / 2) + 1)-numEvents*event_col), column=1+event_col*2)
+        if len(events) == numEvents * 2:
             set_grid()
 
 

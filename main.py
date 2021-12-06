@@ -151,8 +151,8 @@ def copy_log():
     last_time = events[0].get()
     result_output = "Daily Log - " + today + "\n"
     result_output += "Access Daily Log - " + yesterday + " http://wileyphillips.com/daily-log-" + yesterday[:2]
-    result_output += "-" + yesterday[firstSlash + 1:secondSlash + 1] + "-" + yesterday[-4:] + "/\n"
-    result_output += "Current Streak: Daily Log - " + str(dailyLogStreak) + ", Commit - " + str(commitStreak) + "\n"
+    result_output += "-" + yesterday[firstSlash + 1:secondSlash + 1] + "-" + yesterday[-4:] + "/\n\n"
+    result_output += "Current Streak: Daily Log - " + str(dailyLogStreak) + ", Commit - " + str(commitStreak) + "\n\n"
     result_output += topElements[4].get() + "\nToday's Goal: " + topElements[6].get() + "\n\n"
     result_output += last_time + ": " + "Woke up.\n"
     for i in range(int(len(events[2:]) / 2)):

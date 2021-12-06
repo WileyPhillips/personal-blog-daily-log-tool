@@ -5,8 +5,6 @@ from tkinter import *
 from datetime import date, timedelta, datetime
 
 
-# TODO solve commit and daily streak variance
-
 root = Tk()
 root.geometry("1920x1080")
 
@@ -47,7 +45,7 @@ def date_change(up):
     print(today+yesterday)
     td_as_date_time = datetime(int(today[-4:]), int(today[:first_slash_today]),
                                int(today[first_slash_today + 1:second_slash_today + 1]))
-    dailyLogStreak = (td_as_date_time - dayOneOfDailyLogStreak).days
+    dailyLogStreak = (td_as_date_time - dayOneOfDailyLogStreak).days + 1
     commitStreak = (td_as_date_time - dayOneOfCommitStreak).days + 1
     print(td_as_date_time)
     myScreen[0][1].config(text=today)

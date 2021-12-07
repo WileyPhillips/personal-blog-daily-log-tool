@@ -8,6 +8,7 @@ from datetime import date, timedelta, datetime
 root = Tk()
 root.geometry("1920x1080")
 
+# Streak is shown in the output, but not in the GUI
 dayOneOfDailyLogStreak = datetime(2021, 9, 26)
 dayOneOfCommitStreak = datetime(2021, 11, 5)
 streaks = [dayOneOfDailyLogStreak, dayOneOfCommitStreak]
@@ -35,22 +36,24 @@ def date_change(up):
     first_slash_today = today.find("/")
     second_slash_today = today[firstSlash + 1:].find("/") + first_slash_today
 
+    # For GUI and output formatting
     if today[first_slash_today + 1] == "0":
         today = today[:first_slash_today+1] + today[first_slash_today+2:]
         second_slash_today = today[firstSlash + 1:].find("/") + first_slash_today
+    # For output formatting
     if yesterday[firstSlash + 1] == "0":
         yesterday = yesterday[:firstSlash + 1] + yesterday[firstSlash + 2:]
         secondSlash = yesterday[firstSlash + 1:].find("/") + firstSlash
 
-    print(today+yesterday)
     td_as_date_time = datetime(int(today[-4:]), int(today[:first_slash_today]),
                                int(today[first_slash_today + 1:second_slash_today + 1]))
     dailyLogStreak = (td_as_date_time - dayOneOfDailyLogStreak).days + 1
     commitStreak = (td_as_date_time - dayOneOfCommitStreak).days + 1
-    print(td_as_date_time)
-    myScreen[0][1].config(text=today)
+    # The date shown in the top left
+    topElements[1].config(text=today)
 
 
+# To save time on activities that are expected to occur often
 shortHandDict = {
     "1": "Did some calisthenics.",
     "2": "Did some lifting.",
@@ -68,6 +71,7 @@ shortHandDict = {
 }
 
 
+# Prints dictionary into GUI, so shorthand doesn't need to be memorized.
 def set_shorthand():
     for i in range(len(shortHandDict)):
         short_hand_text = str(i+1) + " - " + shortHandDict.get(str(i+1))
@@ -76,11 +80,13 @@ def set_shorthand():
 
 
 def set_screen():
-    global myScreen, td, topElements, events
+    global td, topElements, events
+    # Variable, and controlled via event add/subtract buttons
     events = [
         Entry(root),
         Label(root, text="Wake Up.")
     ]
+    # The same each time
     topElements = [
         Button(root, command=partial(date_change, False), text="<--"),
         Label(root, text=""),
@@ -95,10 +101,6 @@ def set_screen():
         Button(root, command=add_activity, text="+"),
         Button(root, command=sub_activity, text="-"),
         Button(root, command=copy_log, text="copy")
-    ]
-    myScreen = [
-        topElements,
-        events
     ]
     set_grid()
     set_shorthand()
@@ -136,6 +138,7 @@ def add_activity():
         events[-1].grid(row=int((((len(events) - 1) / 2) + 1)-numEvents*event_col), column=0+event_col*2)
         events.append(Entry(root))
         events[-1].grid(row=int((((len(events) - 2) / 2) + 1)-numEvents*event_col), column=1+event_col*2)
+        # In order to move elements over at event thresholds
         if len(events) == numEvents * 2:
             set_grid()
 
@@ -148,6 +151,7 @@ def sub_activity():
 
 
 def copy_log():
+    # Time that they woke
     last_time = events[0].get()
     result_output = "Daily Log - " + today + "\n"
     result_output += "Access Daily Log - " + yesterday + " http://wileyphillips.com/daily-log-" + yesterday[:2]

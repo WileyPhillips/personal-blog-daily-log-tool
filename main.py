@@ -5,6 +5,9 @@ from tkinter import *
 from datetime import date, timedelta, datetime
 
 
+# TODO look into adding color
+# TODO look into adding a new window
+
 root = Tk()
 root.geometry("1920x1080")
 

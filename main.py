@@ -8,8 +8,11 @@ from datetime import date, timedelta, datetime
 # TODO look into adding color
 # TODO look into adding a new window
 
+bgColor = "#93C7D3"
+
 root = Tk()
 root.geometry("1920x1080")
+root.configure(bg=bgColor)
 
 # Streak is shown in the output, but not in the GUI
 dayOneOfDailyLogStreak = datetime(2021, 9, 26)
@@ -22,6 +25,7 @@ currentLog = []
 lastEventIndex = 0
 firstTime = True
 numEvents = 38
+
 
 
 def date_change(up):
@@ -53,7 +57,7 @@ def date_change(up):
     dailyLogStreak = (td_as_date_time - dayOneOfDailyLogStreak).days + 1
     commitStreak = (td_as_date_time - dayOneOfCommitStreak).days + 1
     # The date shown in the top left
-    topElements[1].config(text=today)
+    topElements[1].config(text=today, bg=bgColor)
 
 
 # To save time on activities that are expected to occur often
@@ -67,10 +71,11 @@ shortHandDict = {
     "7": "Updated food log.",
     "8": "Ate breakfast.",
     "9": "Ate lunch.",
-    "10": "Ate Dinner.",
+    "10": "Ate dinner.",
     "11": "Had a snack.",
     "12": "Weighed, and checked body composition.",
-    "13": "Went through night routine."
+    "13": "Did some cleaning.",
+    "14": "Went through night routine."
 }
 
 
@@ -80,6 +85,7 @@ def set_shorthand():
         short_hand_text = str(i+1) + " - " + shortHandDict.get(str(i+1))
         short_hand_label = Label(root, text=short_hand_text)
         short_hand_label.grid(row=2+i, column=7)
+        short_hand_label.configure(bg=bgColor)
 
 
 def set_screen():
@@ -106,10 +112,19 @@ def set_screen():
         Button(root, command=copy_log, text="copy")
     ]
     set_grid()
+    configure_labels()
     set_shorthand()
     td = date.today()
     td = td - timedelta(days=1)
     date_change(True)
+
+
+def configure_labels():
+    global topElements
+    events[1].configure(bg=bgColor)
+    for i in range(len(topElements)):
+        if type(topElements[i]) == Label:
+            topElements[i].configure(bg=bgColor)
 
 
 def set_grid():

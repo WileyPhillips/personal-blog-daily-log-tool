@@ -91,9 +91,11 @@ def set_shorthand():
 def set_screen():
     global td, topElements, events
     # Variable, and controlled via event add/subtract buttons
+    textEntry = StringVar()
+    textEntry.set("Woke up.")
     events = [
         Entry(root),
-        Label(root, text="Wake Up.")
+        Entry(root, textvariable=textEntry)
     ]
     # The same each time
     topElements = [
@@ -121,7 +123,6 @@ def set_screen():
 
 def configure_labels():
     global topElements
-    events[1].configure(bg=bgColor)
     for i in range(len(topElements)):
         if type(topElements[i]) == Label:
             topElements[i].configure(bg=bgColor)
@@ -170,13 +171,16 @@ def sub_activity():
 
 def copy_log():
     # Time that they woke
-    last_time = events[0].get()
     result_output = "Daily Log - " + today + "\n"
     result_output += "Access Daily Log - " + yesterday + " http://wileyphillips.com/daily-log-" + yesterday[:2]
     result_output += "-" + yesterday[firstSlash + 1:secondSlash + 1] + "-" + yesterday[-4:] + "/\n\n"
     result_output += "Current Streak: Daily Log - " + str(dailyLogStreak) + ", Commit - " + str(commitStreak) + "\n\n"
     result_output += topElements[4].get() + "\nToday's Goal: " + topElements[6].get() + "\n\n"
-    result_output += last_time + ": " + "Woke up.\n"
+    last_time = events[0].get()
+    if events[1].get() == "Woke up.":
+        result_output += last_time + ": " + "Woke up.\n"
+    else:
+        result_output += "12:00am - " + last_time + ": " + events[1].get() + "\n"
     for i in range(int(len(events[2:]) / 2)):
         new_time = events[i * 2 + 2].get()
         activity = events[i * 2 + 3].get()

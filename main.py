@@ -5,7 +5,7 @@ from tkinter import *
 from datetime import date, timedelta, datetime
 
 
-# TODO look into adding color
+
 # TODO look into adding a new window
 
 bgColor = "#93C7D3"

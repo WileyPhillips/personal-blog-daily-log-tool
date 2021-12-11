@@ -5,7 +5,7 @@ from tkinter import *
 from datetime import date, timedelta, datetime
 
 
-
+# TODO blank label
 # TODO look into adding a new window
 
 bgColor = "#93C7D3"
@@ -25,7 +25,6 @@ currentLog = []
 lastEventIndex = 0
 firstTime = True
 numEvents = 38
-
 
 
 def date_change(up):
@@ -91,11 +90,11 @@ def set_shorthand():
 def set_screen():
     global td, topElements, events
     # Variable, and controlled via event add/subtract buttons
-    textEntry = StringVar()
-    textEntry.set("Woke up.")
+    text_entry = StringVar()
+    text_entry.set("Woke up.")
     events = [
         Entry(root),
-        Entry(root, textvariable=textEntry)
+        Entry(root, textvariable=text_entry)
     ]
     # The same each time
     topElements = [
@@ -130,24 +129,13 @@ def configure_labels():
 
 def set_grid():
     global myGrid, topElements
-    event_col = (len(events)//(numEvents*2))*2
-    myGrid = [
-        topElements[0].grid(row=0, column=0+event_col),
-        topElements[1].grid(row=0, column=1+event_col),
-        topElements[2].grid(row=0, column=2+event_col),
-        topElements[3].grid(row=0, column=3+event_col),
-        topElements[4].grid(row=0, column=4+event_col),
-        topElements[5].grid(row=0, column=5+event_col),
-        topElements[6].grid(row=0, column=6+event_col),
-        topElements[7].grid(row=0, column=7+event_col),
-        topElements[8].grid(row=0, column=8+event_col),
-        topElements[9].grid(row=0, column=9+event_col),
-        topElements[10].grid(row=0, column=10+event_col),
-        topElements[11].grid(row=0, column=11+event_col),
-        topElements[12].grid(row=1, column=7),
-        events[0].grid(row=1, column=0),
-        events[1].grid(row=1, column=1)
-    ]
+    # Will be used in conjunction with a label of spaces so the add activity button doesn't move at a threshold.
+    event_col = len(events) > (numEvents*2)
+    for i in range(12):
+        topElements[i].grid(row=0, column=i)
+    topElements[12].grid(row=1, column=7)
+    events[0].grid(row=1, column=0)
+    events[1].grid(row=1, column=1)
 
 
 def add_activity():
@@ -180,7 +168,10 @@ def copy_log():
     if events[1].get() == "Woke up.":
         result_output += last_time + ": " + "Woke up.\n"
     else:
-        result_output += "12:00am - " + last_time + ": " + events[1].get() + "\n"
+        activity = events[1].get()
+        if activity in shortHandDict:
+            activity = shortHandDict.get(activity)
+        result_output += "12:00am - " + last_time + ": " + activity + "\n"
     for i in range(int(len(events[2:]) / 2)):
         new_time = events[i * 2 + 2].get()
         activity = events[i * 2 + 3].get()

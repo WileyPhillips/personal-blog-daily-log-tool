@@ -110,7 +110,8 @@ def set_screen():
         Label(root, text="Change Event Total"),
         Button(root, command=add_activity, text="+"),
         Button(root, command=sub_activity, text="-"),
-        Button(root, command=copy_log, text="copy")
+        Button(root, command=copy_log, text="copy"),
+        Button(root, command=clear_log, text= "clear")
     ]
     set_grid()
     configure_labels()
@@ -134,8 +135,15 @@ def set_grid():
     for i in range(12):
         topElements[i].grid(row=0, column=i)
     topElements[12].grid(row=1, column=7)
+    topElements[13].grid(row=3+len(shortHandDict), column=7)
     events[0].grid(row=1, column=0)
     events[1].grid(row=1, column=1)
+
+
+def clear_log():
+    for i in range(len(events)-2):
+        sub_activity()
+    set_screen()
 
 
 def add_activity():

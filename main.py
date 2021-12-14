@@ -7,6 +7,7 @@ from datetime import date, timedelta, datetime
 
 # TODO blank label
 # TODO look into adding a new window
+# TODO make it so clear log doesn't reset the date
 
 bgColor = "#93C7D3"
 
@@ -14,7 +15,7 @@ root = Tk()
 root.geometry("1920x1080")
 root.configure(bg=bgColor)
 
-# Streak is shown in the output, but not in the GUI
+# streak is shown in the output, but not in the GUI
 dayOneOfDailyLogStreak = datetime(2021, 9, 26)
 dayOneOfCommitStreak = datetime(2021, 11, 5)
 streaks = [dayOneOfDailyLogStreak, dayOneOfCommitStreak]
@@ -30,8 +31,10 @@ numEvents = 38
 def date_change(up):
     global td, yesterday, firstSlash, secondSlash, today, dailyLogStreak, commitStreak
     if up:
+        # arrow to the right of date label was hit, and will lead to the date becoming one day later
         td = td + timedelta(days=1)
     else:
+        # arrow to the left of date label was hit, and will lead to the date becoming one day earlier
         td = td - timedelta(days=1)
     yd = td - timedelta(days=1)
     today = td.strftime("%m/%d/%Y")
@@ -42,11 +45,13 @@ def date_change(up):
     first_slash_today = today.find("/")
     second_slash_today = today[firstSlash + 1:].find("/") + first_slash_today
 
-    # For GUI and output formatting
+    """ 
+    For GUI and output formatting as the 9th for example won't display "09" in the link or label but will prior
+    to the if statements underneath
+    """
     if today[first_slash_today + 1] == "0":
         today = today[:first_slash_today+1] + today[first_slash_today+2:]
         second_slash_today = today[firstSlash + 1:].find("/") + first_slash_today
-    # For output formatting
     if yesterday[firstSlash + 1] == "0":
         yesterday = yesterday[:firstSlash + 1] + yesterday[firstSlash + 2:]
         secondSlash = yesterday[firstSlash + 1:].find("/") + firstSlash
@@ -55,11 +60,11 @@ def date_change(up):
                                int(today[first_slash_today + 1:second_slash_today + 1]))
     dailyLogStreak = (td_as_date_time - dayOneOfDailyLogStreak).days + 1
     commitStreak = (td_as_date_time - dayOneOfCommitStreak).days + 1
-    # The date shown in the top left
+    # the date shown in the top left
     topElements[1].config(text=today, bg=bgColor)
 
 
-# To save time on activities that are expected to occur often
+# to save time on activities that are expected to occur often
 shortHandDict = {
     "1": "Did some calisthenics.",
     "2": "Did some lifting.",
@@ -78,7 +83,7 @@ shortHandDict = {
 }
 
 
-# Prints dictionary into GUI, so shorthand doesn't need to be memorized.
+# prints dictionary into GUI, so shorthand doesn't need to be memorized
 def set_shorthand():
     for i in range(len(shortHandDict)):
         short_hand_text = str(i+1) + " - " + shortHandDict.get(str(i+1))
@@ -89,14 +94,14 @@ def set_shorthand():
 
 def set_screen():
     global td, topElements, events
-    # Variable, and controlled via event add/subtract buttons
+    # variable, and controlled via event add/subtract buttons
     text_entry = StringVar()
     text_entry.set("Woke up.")
     events = [
         Entry(root),
         Entry(root, textvariable=text_entry)
     ]
-    # The same each time
+    # the same each time
     topElements = [
         Button(root, command=partial(date_change, False), text="<--"),
         Label(root, text=""),
@@ -111,7 +116,7 @@ def set_screen():
         Button(root, command=add_activity, text="+"),
         Button(root, command=sub_activity, text="-"),
         Button(root, command=copy_log, text="copy"),
-        Button(root, command=clear_log, text= "clear")
+        Button(root, command=clear_log, text="clear")
     ]
     set_grid()
     configure_labels()
@@ -121,6 +126,7 @@ def set_screen():
     date_change(True)
 
 
+# makes all labels within topElements the background color, so that there isn't a white box surrounding them
 def configure_labels():
     global topElements
     for i in range(len(topElements)):
@@ -130,7 +136,7 @@ def configure_labels():
 
 def set_grid():
     global myGrid, topElements
-    # Will be used in conjunction with a label of spaces so the add activity button doesn't move at a threshold.
+    # will be used in conjunction with a label of spaces so the add activity button doesn't move at a threshold
     event_col = len(events) > (numEvents*2)
     for i in range(12):
         topElements[i].grid(row=0, column=i)
@@ -141,8 +147,10 @@ def set_grid():
 
 
 def clear_log():
+    # deletes all added activities
     for i in range(len(events)-2):
         sub_activity()
+    # clears entries and gets everything back to the starting point
     set_screen()
 
 
@@ -153,7 +161,7 @@ def add_activity():
         events[-1].grid(row=int((((len(events) - 1) / 2) + 1)-numEvents*event_col), column=0+event_col*2)
         events.append(Entry(root))
         events[-1].grid(row=int((((len(events) - 2) / 2) + 1)-numEvents*event_col), column=1+event_col*2)
-        # In order to move elements over at event thresholds
+        # in order to move elements over at event thresholds
         if len(events) == numEvents * 2:
             set_grid()
 
@@ -166,16 +174,17 @@ def sub_activity():
 
 
 def copy_log():
-    # Time that they woke
     result_output = "Daily Log - " + today + "\n"
     result_output += "Access Daily Log - " + yesterday + " http://wileyphillips.com/daily-log-" + yesterday[:2]
     result_output += "-" + yesterday[firstSlash + 1:secondSlash + 1] + "-" + yesterday[-4:] + "/\n\n"
     result_output += "Current Streak: Daily Log - " + str(dailyLogStreak) + ", Commit - " + str(commitStreak) + "\n\n"
     result_output += topElements[4].get() + "\nToday's Goal: " + topElements[6].get() + "\n\n"
     last_time = events[0].get()
+    # entry starts as "Woke up.", if changed the time format will be that of me being awake at midnight
     if events[1].get() == "Woke up.":
         result_output += last_time + ": " + "Woke up.\n"
     else:
+        # if first activity isn't waking up this checks if it is a activity with a shorthand
         activity = events[1].get()
         if activity in shortHandDict:
             activity = shortHandDict.get(activity)
@@ -190,6 +199,7 @@ def copy_log():
     result_output += last_time + ": Went to sleep.\n\n"
     result_output += "In Closing: " + topElements[8].get()
 
+    # replaces whatever is currently copied to clipboard with the new daily log.
     root.clipboard_clear()
     root.clipboard_append(result_output)
 

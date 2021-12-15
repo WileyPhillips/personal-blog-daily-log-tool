@@ -1,7 +1,5 @@
-import datetime
 from functools import partial
 from tkinter import *
-# from tkinter.ttk import *
 from datetime import date, timedelta, datetime
 
 

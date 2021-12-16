@@ -100,6 +100,8 @@ def set_screen():
         Entry(root, textvariable=text_entry)
     ]
     # the same each time
+    num_entry = StringVar()
+    num_entry.set("1")
     topElements = [
         Button(root, command=partial(date_change, False), text="<--"),
         Label(root, text=""),
@@ -112,6 +114,7 @@ def set_screen():
         Entry(root),
         Label(root, text="Change Event Total"),
         Button(root, command=add_activity, text="+"),
+        Entry(root, width=4, textvariable=num_entry),
         Button(root, command=sub_activity, text="-"),
         Button(root, command=copy_log, text="copy"),
         Button(root, command=clear_log, text="clear")
@@ -136,10 +139,10 @@ def set_grid():
     global myGrid, topElements
     # will be used in conjunction with a label of spaces so the add activity button doesn't move at a threshold
     event_col = len(events) > (numEvents*2)
-    for i in range(12):
+    for i in range(13):
         topElements[i].grid(row=0, column=i)
-    topElements[12].grid(row=1, column=7)
-    topElements[13].grid(row=3+len(shortHandDict), column=7)
+    topElements[13].grid(row=1, column=7)
+    topElements[14].grid(row=3+len(shortHandDict), column=7)
     events[0].grid(row=1, column=0)
     events[1].grid(row=1, column=1)
 
@@ -153,22 +156,38 @@ def clear_log():
 
 
 def add_activity():
-    if len(events) < numEvents * 4:
-        event_col = len(events) // (numEvents * 2)
-        events.append(Entry(root))
-        events[-1].grid(row=int((((len(events) - 1) / 2) + 1)-numEvents*event_col), column=0+event_col*2)
-        events.append(Entry(root))
-        events[-1].grid(row=int((((len(events) - 2) / 2) + 1)-numEvents*event_col), column=1+event_col*2)
-        # in order to move elements over at event thresholds
-        if len(events) == numEvents * 2:
-            set_grid()
+    iterations = activity_iterations()
+    for i in range(iterations):
+        if len(events) < numEvents * 4:
+            event_col = len(events) // (numEvents * 2)
+            events.append(Entry(root))
+            events[-1].grid(row=int((((len(events) - 1) / 2) + 1)-numEvents*event_col), column=0+event_col*2)
+            events.append(Entry(root))
+            events[-1].grid(row=int((((len(events) - 2) / 2) + 1)-numEvents*event_col), column=1+event_col*2)
+            # in order to move elements over at event thresholds
+            if len(events) == numEvents * 2:
+                set_grid()
+        else:
+            break
 
 
 def sub_activity():
-    if len(events) > 2:
-        for i in range(2):
-            events[-1].destroy()
-            events.pop(-1)
+    iterations = activity_iterations()
+    for i in range(iterations):
+        if len(events) > 2:
+            for j in range(2):
+                events[-1].destroy()
+                events.pop(-1)
+        else:
+            print("yes")
+            break
+
+
+def activity_iterations():
+    try:
+        return int(topElements[11].get())
+    except:
+        return 1
 
 
 def copy_log():

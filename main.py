@@ -91,7 +91,7 @@ def set_shorthand():
 
 
 def set_screen():
-    global td, topElements, events
+    global td, topElements, events, numEntry
     # variable, and controlled via event add/subtract buttons
     text_entry = StringVar()
     text_entry.set("Woke up.")
@@ -100,8 +100,8 @@ def set_screen():
         Entry(root, textvariable=text_entry)
     ]
     # the same each time
-    num_entry = StringVar()
-    num_entry.set("1")
+    numEntry = StringVar()
+    numEntry.set("1")
     topElements = [
         Button(root, command=partial(date_change, False), text="<--"),
         Label(root, text=""),
@@ -114,7 +114,7 @@ def set_screen():
         Entry(root),
         Label(root, text="Change Event Total"),
         Button(root, command=add_activity, text="+"),
-        Entry(root, width=4, textvariable=num_entry),
+        Entry(root, width=4, textvariable=numEntry),
         Button(root, command=sub_activity, text="-"),
         Button(root, command=copy_log, text="copy"),
         Button(root, command=clear_log, text="clear")
@@ -187,6 +187,7 @@ def activity_iterations():
     try:
         return int(topElements[11].get())
     except:
+        numEntry.set("1")
         return 1
 
 

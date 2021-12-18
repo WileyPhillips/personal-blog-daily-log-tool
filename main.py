@@ -193,10 +193,10 @@ def activity_iterations():
 
 def copy_log():
     result_output = "Daily Log - " + today + "\n"
-    result_output += "Access Daily Log - " + yesterday + " http://wileyphillips.com/daily-log-" + yesterday[:2]
-    result_output += "-" + yesterday[firstSlash + 1:secondSlash + 1] + "-" + yesterday[-4:] + "/\n\n"
-    result_output += "Current Streak: Daily Log - " + str(dailyLogStreak) + ", Commit - " + str(commitStreak) + "\n\n"
-    result_output += topElements[4].get() + "\nToday's Goal: " + topElements[6].get() + "\n\n"
+    result_output += "Access Daily Log - {} http://wileyphillips.com/daily-log-{}".format(yesterday, yesterday[:2])
+    result_output += "-{}-{}/\n\n".format(yesterday[firstSlash + 1: secondSlash+1], yesterday[-4:])
+    result_output += "Current Streak: Daily Log - {}, Commit - {}\n\n".format(str(dailyLogStreak), str(commitStreak))
+    result_output += "{}\nToday's Goal: {}\n\n".format(topElements[4].get(), topElements[6].get())
     last_time = events[0].get()
     # entry starts as "Woke up.", if changed the time format will be that of me being awake at midnight
     if events[1].get() == "Woke up.":
@@ -206,13 +206,13 @@ def copy_log():
         activity = events[1].get()
         if activity in shortHandDict:
             activity = shortHandDict.get(activity)
-        result_output += "12:00am - " + last_time + ": " + activity + "\n"
+        result_output += "12:00am - {}: {}\n".format(last_time, activity)
     for i in range(int(len(events[2:]) / 2)):
         new_time = events[i * 2 + 2].get()
         activity = events[i * 2 + 3].get()
         if activity in shortHandDict:
             activity = shortHandDict.get(activity)
-        result_output += last_time + " - " + str(new_time) + ": " + str(activity) + "\n"
+        result_output += "{} - {}: {}\n".format(last_time, str(new_time), str(activity))
         last_time = new_time
     result_output += last_time + ": Went to sleep.\n\n"
     result_output += "In Closing: " + topElements[8].get()

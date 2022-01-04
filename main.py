@@ -119,7 +119,8 @@ def set_screen():
         Button(root, command=sub_activity, text="-"),
         Button(root, command=copy_log, text="copy"),
         Button(root, command=clear_log, text="clear"),
-        ScrolledText(root, wrap=None, width=20)
+        ScrolledText(root, wrap=None, width=20),
+        Button(root, command=format_phone_log, text="populate")
     ]
     set_grid()
     configure_labels()
@@ -146,6 +147,7 @@ def set_grid():
     topElements[13].grid(row=1, column=7)
     topElements[14].grid(row=3+len(shortHandDict), column=7)
     topElements[15].grid(row=1, column=13)
+    topElements[16].grid(row=2, column=13)
     events[0].grid(row=1, column=0)
     events[1].grid(row=1, column=1)
 
@@ -192,6 +194,20 @@ def activity_iterations():
     except:
         numEntry.set("1")
         return 1
+
+
+def format_phone_log():
+    log = topElements[15].get("1.0", "end-1c")
+    log = log.split("\n")
+    skip = False
+    for i in range(len(log)):
+        if skip:
+            skip = False
+            continue
+        if log[i] == "":
+            log.pop(i)
+            skip = True
+    print(log)
 
 
 def copy_log():

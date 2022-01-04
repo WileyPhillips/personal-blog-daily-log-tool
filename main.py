@@ -1,6 +1,7 @@
 from functools import partial
 from tkinter import *
 from datetime import date, timedelta, datetime
+from tkinter.scrolledtext import ScrolledText
 
 
 # TODO blank label
@@ -23,7 +24,7 @@ blankEndTime = False
 currentLog = []
 lastEventIndex = 0
 firstTime = True
-numEvents = 38
+numEvents = 17
 
 
 def date_change(up):
@@ -117,7 +118,8 @@ def set_screen():
         Entry(root, width=4, textvariable=numEntry),
         Button(root, command=sub_activity, text="-"),
         Button(root, command=copy_log, text="copy"),
-        Button(root, command=clear_log, text="clear")
+        Button(root, command=clear_log, text="clear"),
+        ScrolledText(root, wrap=None, width=20)
     ]
     set_grid()
     configure_labels()
@@ -143,6 +145,7 @@ def set_grid():
         topElements[i].grid(row=0, column=i)
     topElements[13].grid(row=1, column=7)
     topElements[14].grid(row=3+len(shortHandDict), column=7)
+    topElements[15].grid(row=1, column=13)
     events[0].grid(row=1, column=0)
     events[1].grid(row=1, column=1)
 

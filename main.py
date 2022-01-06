@@ -199,14 +199,14 @@ def activity_iterations():
 def format_phone_log():
     log = topElements[15].get("1.0", "end-1c")
     log = log.split("\n")
-    skip = False
-    for i in range(len(log)):
-        if skip:
-            skip = False
-            continue
-        if log[i] == "":
-            log.pop(i)
-            skip = True
+    if log[1] == "":
+        log.pop(1)
+    log_placeholder = []
+    if "" in log:
+        for i in range(len(log)):
+            if log[i] != "":
+                log_placeholder.append(log[i])
+    log = log_placeholder
     print(log)
 
 

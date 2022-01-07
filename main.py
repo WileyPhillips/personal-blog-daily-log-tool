@@ -25,6 +25,7 @@ currentLog = []
 lastEventIndex = 0
 firstTime = True
 numEvents = 17
+strNum = ["1", "2", "3", "4", "5", "6", "7", "8", "9", ]
 
 
 def date_change(up):

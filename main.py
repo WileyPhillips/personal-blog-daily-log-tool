@@ -203,10 +203,12 @@ def format_phone_log():
     if log[1] == "":
         log.pop(1)
     log_placeholder = []
-    if "" in log:
-        for i in range(len(log)):
-            if log[i] != "":
-                log_placeholder.append(log[i])
+    for i in range(len(log)):
+        if log[i] != "":
+            for j in range(len(log[i])):
+                if log[i][j] in strNum:
+                    log_placeholder.append([log[i][j:], log[i][:j-1]])
+                    break
     log = log_placeholder
     print(log)
 

@@ -205,10 +205,16 @@ def format_phone_log():
     log_placeholder = []
     for i in range(len(log)):
         if log[i] != "":
-            for j in range(len(log[i])):
-                if log[i][j] in strNum:
-                    log_placeholder.append([log[i][j:], log[i][:j-1]])
-                    break
+            if log[i][0] == "(":
+                dict_index = log[i].find(")")
+                if log[i][1:dict_index] in shortHandDict:
+                    log_placeholder.append([log[i][dict_index+2:], shortHandDict.get(log[i][1:dict_index])])
+                    # Not definite what I want to do about the edge case where this is false
+            else:
+                for j in range(len(log[i])):
+                    if log[i][j] in strNum:
+                        log_placeholder.append([log[i][j:], log[i][:j-1]])
+                        break
     log = log_placeholder
     print(log)
 

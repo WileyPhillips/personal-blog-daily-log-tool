@@ -7,6 +7,7 @@ from tkinter.scrolledtext import ScrolledText
 # TODO blank label
 # TODO look into adding a new window
 # TODO make it so clear log doesn't reset the date
+# TODO incorporate wake up event with textVarList
 
 bgColor = "#93C7D3"
 
@@ -25,7 +26,9 @@ currentLog = []
 lastEventIndex = 0
 firstTime = True
 numEvents = 17
-strNum = ["1", "2", "3", "4", "5", "6", "7", "8", "9", ]
+strNum = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+textVarList = []
+textVarList = []
 
 
 def date_change(up):
@@ -98,7 +101,7 @@ def set_screen():
     text_entry = StringVar()
     text_entry.set("Woke up.")
     events = [
-        Entry(root),
+        Entry(root, text="test"),
         Entry(root, textvariable=text_entry)
     ]
     # the same each time
@@ -165,10 +168,12 @@ def add_activity():
     iterations = activity_iterations()
     for i in range(iterations):
         if len(events) < numEvents * 4:
+            textVarList.append(StringVar())
+            textVarList.append(StringVar())
             event_col = len(events) // (numEvents * 2)
-            events.append(Entry(root))
+            events.append(Entry(root, textvariable=textVarList[-2]))
             events[-1].grid(row=int((((len(events) - 1) / 2) + 1)-numEvents*event_col), column=0+event_col*2)
-            events.append(Entry(root))
+            events.append(Entry(root, textvariable=textVarList[-1]))
             events[-1].grid(row=int((((len(events) - 2) / 2) + 1)-numEvents*event_col), column=1+event_col*2)
             # in order to move elements over at event thresholds
             if len(events) == numEvents * 2:
@@ -223,6 +228,9 @@ def format_phone_log():
             sub_activity()
         else:
             break
+    for i in range(len(log)-1):
+        textVarList[i*2].set(log[i][0])
+        textVarList[i * 2+1].set(log[i][1])
     print(log)
 
 

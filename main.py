@@ -164,6 +164,7 @@ def clear_log():
     set_screen()
 
 
+# Add two entries for a new event
 def add_activity():
     iterations = activity_iterations()
     for i in range(iterations):
@@ -182,6 +183,7 @@ def add_activity():
             break
 
 
+# Get rid of the two entries for the last event
 def sub_activity():
     iterations = activity_iterations()
     for i in range(iterations):
@@ -194,6 +196,7 @@ def sub_activity():
             break
 
 
+# Returns the number of activities that are being subtracted/added
 def activity_iterations():
     try:
         return int(topElements[11].get())
@@ -202,6 +205,7 @@ def activity_iterations():
         return 1
 
 
+# Populates events and date based on pasting in my phone log
 def format_phone_log():
     log = topElements[15].get("1.0", "end-1c")
     log = log.split("\n")

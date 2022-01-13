@@ -8,6 +8,7 @@ from tkinter.scrolledtext import ScrolledText
 # TODO look into adding a new window
 # TODO make it so clear log doesn't reset the date
 # TODO incorporate wake up event with textVarList
+# TODO make first phone log item td via date(), then set that as the date
 
 bgColor = "#93C7D3"
 

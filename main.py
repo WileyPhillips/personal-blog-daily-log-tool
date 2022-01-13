@@ -30,6 +30,7 @@ numEvents = 17
 strNum = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 textVarList = []
 textVarList = []
+print("td = {}").format(date(2022, 12, 2))
 
 
 def date_change(up):
@@ -40,8 +41,10 @@ def date_change(up):
     else:
         # arrow to the left of date label was hit, and will lead to the date becoming one day earlier
         td = td - timedelta(days=1)
+    print("td = {}".format(td))
     yd = td - timedelta(days=1)
     today = td.strftime("%m/%d/%Y")
+    print("today = {}".format(today)
     yesterday = yd.strftime("%m/%d/%Y")
 
     firstSlash = yesterday.find("/")

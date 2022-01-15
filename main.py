@@ -30,7 +30,7 @@ numEvents = 17
 strNum = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 textVarList = []
 textVarList = []
-print("td = {}").format(date(2022, 12, 2))
+print("td = {}".format(date(2022, 12, 2)))
 
 
 def date_change(up):
@@ -44,7 +44,7 @@ def date_change(up):
     print("td = {}".format(td))
     yd = td - timedelta(days=1)
     today = td.strftime("%m/%d/%Y")
-    print("today = {}".format(today)
+    print("today = {}".format(today))
     yesterday = yd.strftime("%m/%d/%Y")
 
     firstSlash = yesterday.find("/")
@@ -127,7 +127,7 @@ def set_screen():
         Button(root, command=sub_activity, text="-"),
         Button(root, command=copy_log, text="copy"),
         Button(root, command=clear_log, text="clear"),
-        ScrolledText(root, wrap=None, width=20),
+        #ScrolledText(root, wrap=None, width=20),
         Button(root, command=format_phone_log, text="populate")
     ]
     set_grid()
@@ -155,7 +155,7 @@ def set_grid():
     topElements[13].grid(row=1, column=7)
     topElements[14].grid(row=3+len(shortHandDict), column=7)
     topElements[15].grid(row=1, column=13)
-    topElements[16].grid(row=2, column=13)
+    #topElements[16].grid(row=2, column=13)
     events[0].grid(row=1, column=0)
     events[1].grid(row=1, column=1)
 

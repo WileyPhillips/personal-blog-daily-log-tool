@@ -3,7 +3,7 @@ from tkinter import *
 from datetime import date, timedelta, datetime
 from tkinter.scrolledtext import ScrolledText
 
-
+# TODO Make it so anything within () is automatically made the event  if start at ) for finding time if not then do the find if in strNUM
 # TODO blank label
 # TODO look into adding a new window
 # TODO make it so clear log doesn't reset the date
